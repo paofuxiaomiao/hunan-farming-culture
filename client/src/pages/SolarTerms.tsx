@@ -31,10 +31,10 @@ const solarTermsData = [
 ];
 
 const seasonThemes = {
-  spring: { gradient: 'from-[#1a2e1a] via-[#2a3d28] to-[#1e3520]', glow: 'rgba(122, 184, 122, 0.12)', particle: '#7CB87C', accent: '#A8D5A0', name: '春', poem: '春风又绿江南岸', textColor: '#C8E6C8' },
-  summer: { gradient: 'from-[#2e2810] via-[#3d3418] to-[#352c12]', glow: 'rgba(212, 168, 70, 0.12)', particle: '#D4A846', accent: '#F0D4A8', name: '夏', poem: '接天莲叶无穷碧', textColor: '#F0E0C0' },
-  autumn: { gradient: 'from-[#2e1e14] via-[#3d2a1a] to-[#352218]', glow: 'rgba(200, 122, 74, 0.12)', particle: '#C87A4A', accent: '#E8B090', name: '秋', poem: '霜叶红于二月花', textColor: '#F0D0B8' },
-  winter: { gradient: 'from-[#1a2530] via-[#222e38] to-[#1e2830]', glow: 'rgba(122, 170, 184, 0.12)', particle: '#7AAAB8', accent: '#B0D4E0', name: '冬', poem: '梅花香自苦寒来', textColor: '#C8E0F0' },
+  spring: { gradient: 'from-[#1a2e1a] via-[#2a3d28] to-[#1e3520]', glow: 'rgba(122, 184, 122, 0.12)', particle: '#7CB87C', accent: '#A8D5A0', name: '春', poem: '春风又绿江南岸', textColor: '#C8E6C8', bg: '/manus-storage/bg-spring-landscape_0f1564b5.png' },
+  summer: { gradient: 'from-[#2e2810] via-[#3d3418] to-[#352c12]', glow: 'rgba(212, 168, 70, 0.12)', particle: '#D4A846', accent: '#F0D4A8', name: '夏', poem: '接天莲叶无穷碧', textColor: '#F0E0C0', bg: '/manus-storage/bg-summer-landscape_7d39e07a.png' },
+  autumn: { gradient: 'from-[#2e1e14] via-[#3d2a1a] to-[#352218]', glow: 'rgba(200, 122, 74, 0.12)', particle: '#C87A4A', accent: '#E8B090', name: '秋', poem: '霜叶红于二月花', textColor: '#F0D0B8', bg: '/manus-storage/bg-autumn-landscape_6040aac5.png' },
+  winter: { gradient: 'from-[#1a2530] via-[#222e38] to-[#1e2830]', glow: 'rgba(122, 170, 184, 0.12)', particle: '#7AAAB8', accent: '#B0D4E0', name: '冬', poem: '梅花香自苦寒来', textColor: '#C8E0F0', bg: '/manus-storage/bg-winter-landscape_98d1726a.png' },
 };
 
 // Canvas粒子系统
@@ -165,8 +165,28 @@ export default function SolarTermsPage() {
       {/* 粒子背景 */}
       <ParticleCanvas season={activeTerm.season} mousePos={mousePos} />
 
+      {/* 山水背景图层 - 空间纵深 */}
+      <div
+        className="absolute inset-0 transition-opacity duration-1000"
+        style={{
+          backgroundImage: `url(${theme.bg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.45,
+          transform: `scale(1.05) translate(${mousePos.x * -8}px, ${mousePos.y * -5}px)`,
+          transition: 'transform 0.8s ease-out, background-image 1s ease',
+        }}
+      />
+      {/* 深度渐变遮罩 - 增强纵深感 */}
+      <div className="absolute inset-0" style={{
+        background: `radial-gradient(ellipse 80% 70% at 40% 50%, transparent 20%, rgba(0,0,0,0.4) 100%)`,
+      }} />
+      {/* 底部深色渐变 */}
+      <div className="absolute inset-x-0 bottom-0 h-1/3" style={{
+        background: 'linear-gradient(to top, rgba(0,0,0,0.5), transparent)',
+      }} />
       {/* 雾气纹理叠加 */}
-      <div className="absolute inset-0 opacity-[0.04]" style={{
+      <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`,
       }} />
 
