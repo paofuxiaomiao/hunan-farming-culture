@@ -58,8 +58,8 @@ export default function LeafletMap({ layers, selectedPoint, onSelectPoint, theme
     if (!mapContainerRef.current || mapRef.current) return;
 
     const map = L.map(mapContainerRef.current, {
-      center: [27.6, 111.0],
-      zoom: 7.5,
+      center: [27.4, 111.5],
+      zoom: 7,
       minZoom: 6,
       maxZoom: 12,
       zoomControl: false,
@@ -130,6 +130,14 @@ export default function LeafletMap({ layers, selectedPoint, onSelectPoint, theme
         stroke: false,
         interactive: false,
       }).addTo(map);
+
+      // 水彩地图蒙版 - 绑定到地理坐标，跟随地图缩放平移
+      const imageBounds: L.LatLngBoundsExpression = [[24.6, 108.8], [30.3, 114.3]];
+      L.imageOverlay(
+        '/manus-storage/pasted_file_OB8bxJ_abfb01d69f1697cf031482dcfc5f467f_39577f07.png',
+        imageBounds,
+        { opacity: 0.5, interactive: false, className: 'map-watercolor-overlay' }
+      ).addTo(map);
 
       // 各市区域填色
       citiesData.features.forEach((feature: any) => {
@@ -212,40 +220,19 @@ export default function LeafletMap({ layers, selectedPoint, onSelectPoint, theme
     });
   };
 
-  // 当选中点位变化时飞到对应位置
+  // 当选中点位变化时飞到对应位置（不过度缩放，保持全省视野）
   useEffect(() => {
     if (!mapRef.current || !selectedPoint) return;
     const point = mapPoints.find(p => p.id === selectedPoint);
     if (point) {
-      mapRef.current.flyTo([point.lat, point.lng], 9, { duration: 0.8 });
+      mapRef.current.flyTo([point.lat, point.lng], 8, { duration: 0.6 });
     }
   }, [selectedPoint]);
 
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainerRef} className="w-full h-full" />
-      {/* 三种图层的水彩蒙版叠加 */}
-      {layers.ancient && (
-        <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-700" style={{ opacity: 0.35 }}>
-          <img src="/manus-storage/map-mask-ancient_7df5afce.png" alt="" className="max-w-[65%] max-h-[80%] object-contain" style={{ mixBlendMode: 'multiply' }} />
-        </div>
-      )}
-      {layers.modern && !layers.ancient && (
-        <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-700" style={{ opacity: 0.35 }}>
-          <img src="/manus-storage/map-mask-modern_9baf2f4d.png" alt="" className="max-w-[65%] max-h-[80%] object-contain" style={{ mixBlendMode: 'multiply' }} />
-        </div>
-      )}
-      {layers.red && !layers.ancient && !layers.modern && (
-        <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-700" style={{ opacity: 0.35 }}>
-          <img src="/manus-storage/map-mask-red_c5723327.png" alt="" className="max-w-[65%] max-h-[80%] object-contain" style={{ mixBlendMode: 'multiply' }} />
-        </div>
-      )}
-      {/* 默认显示古代风格蒙版（当所有图层都开启时） */}
-      {layers.ancient && layers.modern && layers.red && (
-        <div className="absolute inset-0 pointer-events-none flex items-center justify-center" style={{ opacity: 0.25 }}>
-          <img src="/manus-storage/pasted_file_OB8bxJ_abfb01d69f1697cf031482dcfc5f467f_39577f07.png" alt="" className="max-w-[65%] max-h-[80%] object-contain" style={{ mixBlendMode: 'multiply' }} />
-        </div>
-      )}
+      {/* 蒙版通过Leaflet ImageOverlay实现，已绑定地理坐标 */}
       {/* 宣纸纹理叠加 */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.03]"
