@@ -1,4 +1,5 @@
 import { Search, Share2 } from 'lucide-react';
+import { Link } from 'wouter';
 
 export default function Header() {
   return (
@@ -43,15 +44,19 @@ export default function Header() {
 
           {/* 导航菜单 */}
           <nav className="hidden lg:flex items-center gap-7">
-            {['地图浏览', '主题线路', '发展脉络', '重要文物', '节气日历'].map((item, i) => (
-              <a
-                key={item}
-                href={`#section-${i}`}
-                className="text-[13px] text-[#E8D5A8] hover:text-white transition-colors duration-200 tracking-wide relative group"
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-[1.5px] bg-[#C4A86B] group-hover:w-full transition-all duration-300" />
-              </a>
+            {[
+              { label: '地图浏览', href: '/' },
+              { label: '主题线路', href: '/routes' },
+              { label: '发展脉络', href: '/timeline' },
+              { label: '重要文物', href: '/artifacts' },
+              { label: '节气日历', href: '/solar-terms' },
+            ].map((item) => (
+              <Link key={item.href} href={item.href}>
+                <span className="text-[13px] text-[#E8D5A8] hover:text-white transition-colors duration-200 tracking-wide relative group cursor-pointer">
+                  {item.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-[1.5px] bg-[#C4A86B] group-hover:w-full transition-all duration-300" />
+                </span>
+              </Link>
             ))}
           </nav>
 
