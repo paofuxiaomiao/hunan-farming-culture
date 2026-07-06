@@ -121,9 +121,9 @@ export default function LeafletMap({ layers, selectedPoint, onSelectPoint, theme
         mainRing.map((c: number[]) => [c[1], c[0]] as [number, number]),
       ];
 
-      // 省外蒙版 - 暖色宣纸感
-      const maskColor = theme === 'green' ? '#1A2A1C' : '#F5EDD8';
-      const maskOpacity = theme === 'green' ? 0.85 : 0.8;
+      // 省外蒙版 - 宣纸质感
+      const maskColor = theme === 'green' ? '#1A2A1C' : '#F8F0E0';
+      const maskOpacity = theme === 'green' ? 0.82 : 0.88;
       L.polygon(maskCoords, {
         fillColor: maskColor,
         fillOpacity: maskOpacity,
@@ -224,11 +224,24 @@ export default function LeafletMap({ layers, selectedPoint, onSelectPoint, theme
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainerRef} className="w-full h-full" />
-      {/* 水彩纹理叠加层 */}
+      {/* 水彩地图叠加层 - 参考上传图的风格 */}
       <div
-        className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-[0.08]"
+        className="absolute inset-0 pointer-events-none flex items-center justify-center"
+        style={{ opacity: theme === 'gold' ? 0.15 : 0.08 }}
+      >
+        <img
+          src="/manus-storage/pasted_file_OB8bxJ_abfb01d69f1697cf031482dcfc5f467f_39577f07.png"
+          alt=""
+          className="max-w-[70%] max-h-[85%] object-contain"
+          style={{ mixBlendMode: 'multiply' }}
+        />
+      </div>
+      {/* 宣纸纹理叠加 */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`,
+          mixBlendMode: 'overlay',
         }}
       />
     </div>

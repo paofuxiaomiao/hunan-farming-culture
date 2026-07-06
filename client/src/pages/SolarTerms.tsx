@@ -248,15 +248,30 @@ export default function SolarTermsPage() {
                   transition: 'transform 0.7s ease-out',
                 }}
               />
-              {/* 圆形白底底座 */}
+              {/* 宣纸质感圆形底座 */}
               <div
-                className="absolute w-[260px] h-[260px] rounded-full bg-white/90 shadow-xl"
+                className="absolute w-[270px] h-[270px] rounded-full overflow-hidden"
                 style={{
                   transform: `translate(${mousePos.x * 10}px, ${mousePos.y * 10}px)`,
                   transition: 'transform 0.4s ease-out',
-                  boxShadow: `0 8px 60px rgba(0,0,0,0.3), inset 0 0 30px rgba(255,255,255,0.1)`,
+                  boxShadow: `0 8px 60px rgba(0,0,0,0.3), 0 2px 20px rgba(0,0,0,0.15)`,
                 }}
-              />
+              >
+                {/* 宣纸底色 */}
+                <div className="absolute inset-0 bg-[#F8F3E8]" />
+                {/* 宣纸纹理 */}
+                <div className="absolute inset-0 opacity-[0.15]" style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.6'/%3E%3C/svg%3E")`,
+                }} />
+                {/* 宣纸纤维纹理 */}
+                <div className="absolute inset-0 opacity-[0.06]" style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cg stroke='%23A08050' stroke-width='0.3' opacity='0.5'%3E%3Cline x1='10' y1='20' x2='90' y2='22'/%3E%3Cline x1='5' y1='45' x2='95' y2='47'/%3E%3Cline x1='15' y1='70' x2='85' y2='72'/%3E%3Cline x1='8' y1='88' x2='92' y2='90'/%3E%3C/g%3E%3C/svg%3E")`,
+                }} />
+                {/* 边缘暖色渐变 */}
+                <div className="absolute inset-0 rounded-full" style={{
+                  background: 'radial-gradient(circle, transparent 60%, rgba(180,150,100,0.08) 100%)',
+                }} />
+              </div>
               {/* 植物画 */}
               <motion.div
                 initial={{ y: 30, opacity: 0, rotateY: -5 }}

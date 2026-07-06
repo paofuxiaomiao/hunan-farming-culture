@@ -185,48 +185,57 @@ export default function Home() {
             </button>
           </div>
 
-          {/* 右侧详情面板 */}
+          {/* 右侧详情面板 - 带动画过渡 */}
           {selected && showDetail && (
-            <div className="absolute top-4 right-4 bottom-4 w-[300px] bg-[#1A1815]/95 backdrop-blur-md border border-[#2A2720] rounded-xl overflow-hidden flex flex-col z-40 shadow-2xl">
+            <div
+              className="absolute top-4 right-4 bottom-4 w-[300px] bg-[#1A1815]/95 backdrop-blur-md border border-[#2A2720] rounded-xl overflow-hidden flex flex-col z-40 shadow-2xl"
+              style={{ animation: 'slideInRight 0.35s cubic-bezier(0.23,1,0.32,1) both' }}
+            >
               {/* 头部 */}
               <div className="px-4 py-3 border-b border-[#2A2720] flex items-center justify-between">
-                <h3 className="font-serif-title text-sm text-[#E8D5A8]">点位详情</h3>
-                <button onClick={() => setShowDetail(false)} className="text-[#6B6560] hover:text-[#B8AFA8]">
-                  <X className="w-4 h-4" />
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-sm" style={{ backgroundColor: getPointColor(selected.type) }} />
+                  <h3 className="font-serif-title text-sm text-[#E8D5A8]">点位详情</h3>
+                </div>
+                <button onClick={() => setShowDetail(false)} className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-[#2A2720] text-[#6B6560] hover:text-[#B8AFA8] transition-all">
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
 
               {/* 内容 */}
               <div className="flex-1 overflow-y-auto p-4">
-                <h4 className="font-serif-title text-base text-[#E8D5A8] mb-2">{selected.name}</h4>
-                <span className="inline-block px-2 py-0.5 rounded text-[10px] text-white mb-3" style={{ backgroundColor: getPointColor(selected.type) }}>
-                  {selected.type === 'ancient' ? '古代农耕遗址' : selected.type === 'modern' ? '现代农耕地标' : '红色农耕旧址'}
-                </span>
+                <h4 className="font-serif-title text-lg text-[#E8D5A8] mb-1.5">{selected.name}</h4>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] text-white" style={{ backgroundColor: getPointColor(selected.type) }}>
+                    {selected.type === 'ancient' ? '古代农耕遗址' : selected.type === 'modern' ? '现代农耕地标' : '红色农耕旧址'}
+                  </span>
+                  <span className="text-[10px] text-[#6B6560]">{selected.period}</span>
+                </div>
 
                 {selected.image && (
-                  <div className="rounded-lg overflow-hidden mb-3 border border-[#2A2720]">
-                    <img src={selected.image} alt={selected.name} className="w-full h-32 object-cover" />
+                  <div className="rounded-lg overflow-hidden mb-4 border border-[#2A2720] group cursor-pointer">
+                    <img src={selected.image} alt={selected.name} className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                 )}
 
-                <p className="text-xs text-[#B8AFA8] leading-relaxed mb-3">{selected.description}</p>
+                <p className="text-xs text-[#B8AFA8] leading-[1.8] mb-4">{selected.description}</p>
 
                 <div className="flex flex-wrap gap-1.5">
                   {selected.tags.map((tag) => (
-                    <span key={tag} className="px-2 py-0.5 bg-[#2A2720] text-[#8B8070] text-[10px] rounded border border-[#3A3530]">{tag}</span>
+                    <span key={tag} className="px-2.5 py-1 bg-[#2A2720] text-[#8B8070] text-[10px] rounded-full border border-[#3A3530] hover:border-[#5A4A30] hover:text-[#C4A86B] transition-all cursor-pointer">{tag}</span>
                   ))}
                 </div>
               </div>
 
               {/* 操作 */}
-              <div className="px-3 py-2.5 border-t border-[#2A2720] flex gap-2">
-                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A2720] border border-[#3A3530] rounded text-[10px] text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all">
-                  <ExternalLink className="w-3 h-3" />详情
+              <div className="px-3 py-3 border-t border-[#2A2720] flex gap-2">
+                <button className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-[#C4A86B] text-[#1A1815] rounded-lg text-[11px] font-medium hover:bg-[#D4B87B] transition-all active:scale-[0.97]">
+                  <ExternalLink className="w-3 h-3" />查看详情
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A2720] border border-[#3A3530] rounded text-[10px] text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all">
+                <button className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-[#2A2720] border border-[#3A3530] rounded-lg text-[11px] text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all active:scale-[0.97]">
                   <Navigation className="w-3 h-3" />路线
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A2720] border border-[#3A3530] rounded text-[10px] text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all">
+                <button className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-[#2A2720] border border-[#3A3530] rounded-lg text-[11px] text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all active:scale-[0.97]">
                   <Share2 className="w-3 h-3" />分享
                 </button>
               </div>
