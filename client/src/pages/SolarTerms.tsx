@@ -31,10 +31,10 @@ const solarTermsData = [
 ];
 
 const seasonThemes = {
-  spring: { gradient: 'from-[#1a2e1a] via-[#2a3d28] to-[#1e3520]', glow: 'rgba(122, 184, 122, 0.12)', particle: '#7CB87C', accent: '#A8D5A0', name: '春', poem: '春风又绿江南岸', textColor: '#C8E6C8', bg: '/manus-storage/bg-spring-landscape_0f1564b5.png' },
-  summer: { gradient: 'from-[#2e2810] via-[#3d3418] to-[#352c12]', glow: 'rgba(212, 168, 70, 0.12)', particle: '#D4A846', accent: '#F0D4A8', name: '夏', poem: '接天莲叶无穷碧', textColor: '#F0E0C0', bg: '/manus-storage/bg-summer-landscape_7d39e07a.png' },
-  autumn: { gradient: 'from-[#2e1e14] via-[#3d2a1a] to-[#352218]', glow: 'rgba(200, 122, 74, 0.12)', particle: '#C87A4A', accent: '#E8B090', name: '秋', poem: '霜叶红于二月花', textColor: '#F0D0B8', bg: '/manus-storage/bg-autumn-landscape_6040aac5.png' },
-  winter: { gradient: 'from-[#1a2530] via-[#222e38] to-[#1e2830]', glow: 'rgba(122, 170, 184, 0.12)', particle: '#7AAAB8', accent: '#B0D4E0', name: '冬', poem: '梅花香自苦寒来', textColor: '#C8E0F0', bg: '/manus-storage/bg-winter-landscape_98d1726a.png' },
+  spring: { gradient: 'from-[#1a2e1a] via-[#2a3d28] to-[#1e3520]', glow: 'rgba(122, 184, 122, 0.15)', particle: '#7CB87C', accent: '#A8D5A0', name: '春', poem: '春风又绿江南岸', textColor: '#C8E6C8', bg: '/manus-storage/bg-spring-hd_5f744524.png' },
+  summer: { gradient: 'from-[#2e2510] via-[#3d3015] to-[#352a0e]', glow: 'rgba(212, 180, 70, 0.15)', particle: '#D4B046', accent: '#F5E0A0', name: '夏', poem: '接天莲叶无穷碧', textColor: '#F5EAC0', bg: '/manus-storage/bg-summer-hd_848680a0.png' },
+  autumn: { gradient: 'from-[#2e1510] via-[#3d1a14] to-[#351812]', glow: 'rgba(200, 80, 50, 0.15)', particle: '#C85030', accent: '#E89070', name: '秋', poem: '霜叶红于二月花', textColor: '#F0C0A8', bg: '/manus-storage/bg-autumn-hd_0704b67e.png' },
+  winter: { gradient: 'from-[#1a2230] via-[#202a38] to-[#182530]', glow: 'rgba(140, 180, 200, 0.15)', particle: '#8CBAD0', accent: '#C0E0F0', name: '冬', poem: '梅花香自苦寒来', textColor: '#D0E8F5', bg: '/manus-storage/bg-winter-hd_726fbbc3.png' },
 };
 
 // Canvas粒子系统
@@ -172,7 +172,7 @@ export default function SolarTermsPage() {
           backgroundImage: `url(${theme.bg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          opacity: 0.45,
+          opacity: 0.6,
           transform: `scale(1.05) translate(${mousePos.x * -8}px, ${mousePos.y * -5}px)`,
           transition: 'transform 0.8s ease-out, background-image 1s ease',
         }}
@@ -248,12 +248,21 @@ export default function SolarTermsPage() {
                   transition: 'transform 0.7s ease-out',
                 }}
               />
+              {/* 圆形白底底座 */}
+              <div
+                className="absolute w-[260px] h-[260px] rounded-full bg-white/90 shadow-xl"
+                style={{
+                  transform: `translate(${mousePos.x * 10}px, ${mousePos.y * 10}px)`,
+                  transition: 'transform 0.4s ease-out',
+                  boxShadow: `0 8px 60px rgba(0,0,0,0.3), inset 0 0 30px rgba(255,255,255,0.1)`,
+                }}
+              />
               {/* 植物画 */}
               <motion.div
                 initial={{ y: 30, opacity: 0, rotateY: -5 }}
                 animate={{ y: 0, opacity: 1, rotateY: 0 }}
                 transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1], delay: 0.1 }}
-                className="relative z-10 w-[280px] h-[380px]"
+                className="relative z-10 w-[300px] h-[400px]"
                 style={{
                   transform: `perspective(1200px) translate(${mousePos.x * 20}px, ${mousePos.y * 20}px) rotateY(${mousePos.x * 6}deg) rotateX(${mousePos.y * -4}deg)`,
                   transition: 'transform 0.3s ease-out',
@@ -263,7 +272,7 @@ export default function SolarTermsPage() {
                   src={activeTerm.icon}
                   alt={activeTerm.plant}
                   className="w-full h-full object-contain"
-                  style={{ filter: `drop-shadow(0 0 60px ${theme.glow.replace('0.12', '0.3')})` }}
+                  style={{ filter: `drop-shadow(0 4px 20px rgba(0,0,0,0.2))` }}
                 />
               </motion.div>
             </div>
