@@ -131,12 +131,13 @@ export default function LeafletMap({ layers, selectedPoint, onSelectPoint, theme
         interactive: false,
       }).addTo(map);
 
-      // 水彩地图蒙版 - 绑定到地理坐标，跟随地图缩放平移
-      const imageBounds: L.LatLngBoundsExpression = [[24.6, 108.8], [30.3, 114.3]];
+      // 水彩地图蒙版 - 精确对齐湖南省边界
+      // 湖南省实际边界：纬度 24.63-30.13，经度 108.79-114.26
+      const imageBounds: L.LatLngBoundsExpression = [[24.63, 108.79], [30.13, 114.26]];
       L.imageOverlay(
         '/manus-storage/pasted_file_OB8bxJ_abfb01d69f1697cf031482dcfc5f467f_39577f07.png',
         imageBounds,
-        { opacity: 0.5, interactive: false, className: 'map-watercolor-overlay' }
+        { opacity: 0.45, interactive: false, className: 'map-watercolor-overlay' }
       ).addTo(map);
 
       // 各市区域填色

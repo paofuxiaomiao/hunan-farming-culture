@@ -12,6 +12,7 @@ export default function Home() {
   const [showDetail, setShowDetail] = useState(false);
   const [mapTheme, setMapTheme] = useState<'green' | 'gold'>('gold');
   const [likes, setLikes] = useState<Record<string, number>>({});
+  const [layout, setLayout] = useState<'dashboard' | 'classic'>('dashboard');
 
   const visiblePoints = mapPoints.filter((p) => {
     if (p.type === 'ancient' && !layers.ancient) return false;
@@ -140,11 +141,77 @@ export default function Home() {
                 <Palette className="w-3 h-3" />墨绿
               </button>
             </div>
+
+            {/* 布局切换按钮 */}
+            <div className="flex items-center gap-0.5 bg-white/[0.08] rounded-lg p-0.5 border border-white/10">
+              <button
+                onClick={() => setLayout('dashboard')}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-[10px] font-medium transition-all ${layout === 'dashboard' ? 'bg-white/20 text-white shadow-sm' : 'text-white/50 hover:text-white/80'}`}
+              >
+                <LayoutGrid className="w-3 h-3" />看板
+              </button>
+              <button
+                onClick={() => setLayout('classic')}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-[10px] font-medium transition-all ${layout === 'classic' ? 'bg-white/20 text-white shadow-sm' : 'text-white/50 hover:text-white/80'}`}
+              >
+                <MapPin className="w-3 h-3" />经典
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* 主内容区 */}
+      {layout === 'classic' ? (
+        /* 经典布局 - 白底中心化 */
+        <div className="flex-1 overflow-y-auto bg-[#FAF7F2]">
+          <div className="max-w-[1200px] mx-auto px-8 py-8">
+            {/* 经典标题 */}
+            <div className="text-center mb-8">
+              <h2 className="font-display text-3xl text-[#3D2B0F] mb-2">湖南省农耕文化地图</h2>
+              <p className="text-sm text-[#7A5C2E]">小小一幅地图，展开湖湘万年农耕文明</p>
+            </div>
+            {/* 经典地图区域 */}
+            <div className="grid grid-cols-12 gap-6">
+              {/* 左侧筛选 */}
+              <div className="col-span-3">
+                <div className="bg-white rounded-xl border border-[#E8DCC8] p-4 shadow-sm">
+                  <h3 className="font-serif-title text-sm text-[#3D2B0F] mb-3">图层筛选</h3>
+                  <div className="space-y-3">
+                    <ClassicLayerToggle color="#8B6914" label="古代农耕遗址" active={layers.ancient} onToggle={() => setLayers({...layers, ancient: !layers.ancient})} />
+                    <ClassicLayerToggle color="#4A8C5C" label="现代农耕地标" active={layers.modern} onToggle={() => setLayers({...layers, modern: !layers.modern})} />
+                    <ClassicLayerToggle color="#C44545" label="红色农耕旧址" active={layers.red} onToggle={() => setLayers({...layers, red: !layers.red})} />
+                  </div>
+                </div>
+              </div>
+              {/* 中间地图 */}
+              <div className="col-span-6">
+                <div className="bg-white rounded-xl border border-[#E8DCC8] shadow-sm overflow-hidden" style={{ height: '480px' }}>
+                  <LeafletMap layers={layers} selectedPoint={selectedPoint} onSelectPoint={(id) => { setSelectedPoint(id); setShowDetail(true); }} theme={mapTheme} />
+                </div>
+              </div>
+              {/* 右侧详情 */}
+              <div className="col-span-3">
+                {selected ? (
+                  <div className="bg-white rounded-xl border border-[#E8DCC8] p-4 shadow-sm">
+                    <h4 className="font-serif-title text-base text-[#3D2B0F] mb-2">{selected.name}</h4>
+                    <span className="inline-block px-2 py-0.5 rounded-full text-[10px] text-white mb-3" style={{ backgroundColor: getPointColor(selected.type) }}>
+                      {getTypeLabel(selected.type)}
+                    </span>
+                    {selected.image && <img src={selected.image} alt="" className="w-full h-28 object-cover rounded-lg mb-3 border border-[#E8DCC8]" />}
+                    <p className="text-xs text-[#5C4520] leading-relaxed mb-3">{selected.description}</p>
+                    <div className="flex flex-wrap gap-1">
+                      {selected.tags.map(t => <span key={t} className="px-2 py-0.5 bg-[#F5F0E8] text-[#7A5C2E] text-[9px] rounded-full border border-[#E8DCC8]">{t}</span>)}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-xl border border-[#E8DCC8] p-4 shadow-sm text-center text-sm text-[#B8A890]">请选择一个点位</div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
       <div className="flex-1 flex relative overflow-hidden">
         {/* 左侧面板 - 照搬xiangchao风格 */}
         <aside className="w-[260px] shrink-0 bg-white border-r border-[oklch(0.90_0.005_80)] flex flex-col z-40">
@@ -331,7 +398,22 @@ export default function Home() {
           </AnimatePresence>
         </div>
       </div>
+      )}
     </div>
+  );
+}
+
+function ClassicLayerToggle({ color, label, active, onToggle }: { color: string; label: string; active: boolean; onToggle: () => void }) {
+  return (
+    <button onClick={onToggle} className="w-full flex items-center justify-between py-1.5">
+      <div className="flex items-center gap-2">
+        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: color, opacity: active ? 1 : 0.3 }} />
+        <span className={`text-xs ${active ? 'text-[#3D2B0F]' : 'text-[#B8A890]'}`}>{label}</span>
+      </div>
+      <div className={`w-8 h-[18px] rounded-full relative transition-colors ${active ? '' : 'bg-[#E8DCC8]'}`} style={active ? { backgroundColor: color } : undefined}>
+        <div className={`absolute top-[2px] w-[14px] h-[14px] rounded-full bg-white shadow-sm transition-transform ${active ? 'left-[16px]' : 'left-[2px]'}`} />
+      </div>
+    </button>
   );
 }
 
