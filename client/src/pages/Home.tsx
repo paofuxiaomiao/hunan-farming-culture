@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback } from 'react';
-import { MapView } from '@/components/Map';
+import { useState, useCallback } from 'react';
+import HunanMap from '@/components/HunanMap';
 import { mapPoints, type MapPoint } from '@/data/mapData';
 import { ChevronRight, Search, X, ExternalLink, Navigation, Share2, Layers, Volume2 } from 'lucide-react';
 import { Link } from 'wouter';
@@ -9,7 +9,7 @@ export default function Home() {
   const [layers, setLayers] = useState({ ancient: true, modern: true, red: true });
   const [searchText, setSearchText] = useState('');
   const [showDetail, setShowDetail] = useState(true);
-  const mapRef = useRef<google.maps.Map | null>(null);
+  const [colorScheme, setColorScheme] = useState<'ancient' | 'modern' | 'red' | 'default'>('default');
 
   const visiblePoints = mapPoints.filter((p) => {
     if (p.type === 'ancient' && !layers.ancient) return false;
@@ -31,51 +31,17 @@ export default function Home() {
   };
 
   const flyToPoint = useCallback((point: MapPoint) => {
-    if (mapRef.current) {
-      mapRef.current.panTo({ lat: point.lat, lng: point.lng });
-      mapRef.current.setZoom(10);
-    }
     setSelectedPoint(point.id);
     setShowDetail(true);
   }, []);
 
-  const handleMapReady = useCallback((map: google.maps.Map) => {
-    mapRef.current = map;
-    map.setOptions({
-      styles: [
-        { elementType: 'geometry', stylers: [{ color: '#f5f0e8' }] },
-        { elementType: 'labels.text.stroke', stylers: [{ color: '#f5f0e8' }] },
-        { elementType: 'labels.text.fill', stylers: [{ color: '#5c4520' }] },
-        { featureType: 'administrative', elementType: 'geometry.stroke', stylers: [{ color: '#c4a86b' }] },
-        { featureType: 'administrative.province', elementType: 'geometry.stroke', stylers: [{ color: '#8B6914', weight: 2 }] },
-        { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#d4e8e0' }] },
-        { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#6b9dab' }] },
-        { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#e8dcc8' }] },
-        { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] },
-        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-        { featureType: 'transit', stylers: [{ visibility: 'off' }] },
-        { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#f0ebe0' }] },
-      ],
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: false,
-      zoomControl: false,
-    });
-
-    // 添加标注
-    visiblePoints.forEach((point) => {
-      const color = getPointColor(point.type);
-      const el = document.createElement('div');
-      el.innerHTML = `<svg width="24" height="32" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z" fill="${color}" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="white"/></svg>`;
-      const marker = new google.maps.marker.AdvancedMarkerElement({
-        map,
-        position: { lat: point.lat, lng: point.lng },
-        title: point.name,
-        content: el,
-      });
-      marker.addListener('click', () => { setSelectedPoint(point.id); setShowDetail(true); });
-    });
-  }, []);
+  // 根据激活的图层设置配色
+  const activeColorScheme = (): 'ancient' | 'modern' | 'red' | 'default' => {
+    if (layers.ancient && !layers.modern && !layers.red) return 'ancient';
+    if (!layers.ancient && layers.modern && !layers.red) return 'modern';
+    if (!layers.ancient && !layers.modern && layers.red) return 'red';
+    return 'default';
+  };
 
   return (
     <div className="h-screen w-screen overflow-hidden flex flex-col bg-[#141210]">
@@ -186,12 +152,14 @@ export default function Home() {
 
         {/* 地图区域 */}
         <div className="flex-1 relative">
-          <MapView
-            className="w-full h-full"
-            initialCenter={{ lat: 27.6, lng: 111.7 }}
-            initialZoom={7}
-            onMapReady={handleMapReady}
-          />
+          <div className="w-full h-full flex items-center justify-center p-6 bg-[#1A1815]">
+            <HunanMap
+              layers={layers}
+              selectedPoint={selectedPoint}
+              onSelectPoint={(id) => { setSelectedPoint(id); setShowDetail(true); }}
+              colorScheme={activeColorScheme()}
+            />
+          </div>
 
           {/* 图例 - 底部左侧 */}
           <div className="absolute bottom-4 left-4 bg-[#1A1815]/90 backdrop-blur-sm border border-[#2A2720] rounded-lg px-4 py-2.5 flex items-center gap-4 z-30">
@@ -211,7 +179,7 @@ export default function Home() {
 
           {/* 全省总览按钮 */}
           <button
-            onClick={() => mapRef.current?.setZoom(7)}
+            onClick={() => {}}
             className="absolute top-4 right-4 bg-[#1A1815]/90 backdrop-blur-sm border border-[#2A2720] rounded-lg px-3 py-2 text-xs text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all z-30"
           >
             全省总览
