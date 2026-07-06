@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import HunanMap from '@/components/HunanMap';
+import LeafletMap from '@/components/LeafletMap';
 import { mapPoints, type MapPoint } from '@/data/mapData';
 import { ChevronRight, Search, X, ExternalLink, Navigation, Share2, Layers, Volume2 } from 'lucide-react';
 import { Link } from 'wouter';
@@ -9,7 +9,7 @@ export default function Home() {
   const [layers, setLayers] = useState({ ancient: true, modern: true, red: true });
   const [searchText, setSearchText] = useState('');
   const [showDetail, setShowDetail] = useState(true);
-  const [colorScheme, setColorScheme] = useState<'ancient' | 'modern' | 'red' | 'default'>('default');
+  const [mapTheme, setMapTheme] = useState<'green' | 'gold'>('gold');
 
   const visiblePoints = mapPoints.filter((p) => {
     if (p.type === 'ancient' && !layers.ancient) return false;
@@ -35,13 +35,7 @@ export default function Home() {
     setShowDetail(true);
   }, []);
 
-  // 根据激活的图层设置配色
-  const activeColorScheme = (): 'ancient' | 'modern' | 'red' | 'default' => {
-    if (layers.ancient && !layers.modern && !layers.red) return 'ancient';
-    if (!layers.ancient && layers.modern && !layers.red) return 'modern';
-    if (!layers.ancient && !layers.modern && layers.red) return 'red';
-    return 'default';
-  };
+
 
   return (
     <div className="h-screen w-screen overflow-hidden flex flex-col bg-[#141210]">
@@ -152,14 +146,12 @@ export default function Home() {
 
         {/* 地图区域 */}
         <div className="flex-1 relative">
-          <div className="w-full h-full flex items-center justify-center p-6 bg-[#1A1815]">
-            <HunanMap
-              layers={layers}
-              selectedPoint={selectedPoint}
-              onSelectPoint={(id) => { setSelectedPoint(id); setShowDetail(true); }}
-              colorScheme={activeColorScheme()}
-            />
-          </div>
+          <LeafletMap
+            layers={layers}
+            selectedPoint={selectedPoint}
+            onSelectPoint={(id) => { setSelectedPoint(id); setShowDetail(true); }}
+            theme={mapTheme}
+          />
 
           {/* 图例 - 底部左侧 */}
           <div className="absolute bottom-4 left-4 bg-[#1A1815]/90 backdrop-blur-sm border border-[#2A2720] rounded-lg px-4 py-2.5 flex items-center gap-4 z-30">
@@ -177,13 +169,21 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 全省总览按钮 */}
-          <button
-            onClick={() => {}}
-            className="absolute top-4 right-4 bg-[#1A1815]/90 backdrop-blur-sm border border-[#2A2720] rounded-lg px-3 py-2 text-xs text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all z-30"
-          >
-            全省总览
-          </button>
+          {/* 主题切换按钮 */}
+          <div className="absolute top-4 right-4 flex gap-2 z-30">
+            <button
+              onClick={() => setMapTheme('gold')}
+              className={`px-3 py-1.5 rounded text-xs border transition-all ${mapTheme === 'gold' ? 'bg-[#C4A86B] text-white border-[#C4A86B]' : 'bg-[#1A1815]/90 text-[#B8AFA8] border-[#2A2720] hover:border-[#5A4A30]'}`}
+            >
+              暖色
+            </button>
+            <button
+              onClick={() => setMapTheme('green')}
+              className={`px-3 py-1.5 rounded text-xs border transition-all ${mapTheme === 'green' ? 'bg-[#2A4A2C] text-white border-[#4A6B4A]' : 'bg-[#1A1815]/90 text-[#B8AFA8] border-[#2A2720] hover:border-[#5A4A30]'}`}
+            >
+              墨绿
+            </button>
+          </div>
 
           {/* 右侧详情面板 */}
           {selected && showDetail && (
