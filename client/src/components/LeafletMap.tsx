@@ -224,21 +224,31 @@ export default function LeafletMap({ layers, selectedPoint, onSelectPoint, theme
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainerRef} className="w-full h-full" />
-      {/* 水彩地图叠加层 - 参考上传图的风格 */}
-      <div
-        className="absolute inset-0 pointer-events-none flex items-center justify-center"
-        style={{ opacity: theme === 'gold' ? 0.15 : 0.08 }}
-      >
-        <img
-          src="/manus-storage/pasted_file_OB8bxJ_abfb01d69f1697cf031482dcfc5f467f_39577f07.png"
-          alt=""
-          className="max-w-[70%] max-h-[85%] object-contain"
-          style={{ mixBlendMode: 'multiply' }}
-        />
-      </div>
+      {/* 三种图层的水彩蒙版叠加 */}
+      {layers.ancient && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-700" style={{ opacity: 0.35 }}>
+          <img src="/manus-storage/map-mask-ancient_7df5afce.png" alt="" className="max-w-[65%] max-h-[80%] object-contain" style={{ mixBlendMode: 'multiply' }} />
+        </div>
+      )}
+      {layers.modern && !layers.ancient && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-700" style={{ opacity: 0.35 }}>
+          <img src="/manus-storage/map-mask-modern_9baf2f4d.png" alt="" className="max-w-[65%] max-h-[80%] object-contain" style={{ mixBlendMode: 'multiply' }} />
+        </div>
+      )}
+      {layers.red && !layers.ancient && !layers.modern && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-700" style={{ opacity: 0.35 }}>
+          <img src="/manus-storage/map-mask-red_c5723327.png" alt="" className="max-w-[65%] max-h-[80%] object-contain" style={{ mixBlendMode: 'multiply' }} />
+        </div>
+      )}
+      {/* 默认显示古代风格蒙版（当所有图层都开启时） */}
+      {layers.ancient && layers.modern && layers.red && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center" style={{ opacity: 0.25 }}>
+          <img src="/manus-storage/pasted_file_OB8bxJ_abfb01d69f1697cf031482dcfc5f467f_39577f07.png" alt="" className="max-w-[65%] max-h-[80%] object-contain" style={{ mixBlendMode: 'multiply' }} />
+        </div>
+      )}
       {/* 宣纸纹理叠加 */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`,
           mixBlendMode: 'overlay',
