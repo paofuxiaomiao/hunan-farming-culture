@@ -1,9 +1,8 @@
 /*
  * 湖南省农耕文化地图
- * 设计哲学：植物画册咨询主义（Botanical Consulting）
- * 政府门户网站调性：庄重、权威、精致、大气
- * 色调：暖棕金色 + 暖雾白底 + 深墨文字
- * 字体：Noto Serif SC（标题）/ Noto Sans SC（正文）/ Inter（数字）
+ * 设计哲学：山水咨询主义（Landscape Consulting）
+ * McKinsey式咨询版式骨架 × 湖湘山水雾面自然气质
+ * 留白即结构 · 自然即隐喻 · 网格即纪律
  */
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -34,49 +33,48 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-gold: var(--gold);
-  --color-gold-light: var(--gold-light);
-  --color-warm-bg: var(--warm-bg);
-  --color-ancient: var(--ancient);
-  --color-modern: var(--modern);
-  --color-red-rev: var(--red-rev);
-  --font-serif-sc: "Noto Serif SC", "Songti SC", serif;
-  --font-sans-sc: "Noto Sans SC", "PingFang SC", sans-serif;
+  --color-ink: var(--ink);
+  --color-mist: var(--mist);
+  --color-stone-bg: var(--stone-bg);
+  --color-brand: var(--brand);
+  --font-serif-sc: "Noto Serif SC", serif;
+  --font-sans-sc: "Noto Sans SC", sans-serif;
   --font-inter: "Inter", sans-serif;
 }
 
 :root {
-  --radius: 0.5rem;
+  --radius: 0.375rem;
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-soft: cubic-bezier(0.77, 0, 0.175, 1);
+
   /* 暖雾白底 */
-  --background: oklch(0.98 0.004 90);
-  /* 深墨色 */
-  --foreground: oklch(0.22 0.01 60);
-  /* 土金色 - 品牌主色 */
-  --gold: oklch(0.52 0.12 75);
-  --gold-light: oklch(0.82 0.06 80);
-  /* 暖米色背景 */
-  --warm-bg: oklch(0.96 0.01 85);
-  /* 三种图层标注色 */
-  --ancient: oklch(0.52 0.12 75);
-  --modern: oklch(0.52 0.12 155);
-  --red-rev: oklch(0.52 0.18 25);
-  /* 组件色 */
+  --background: oklch(0.983 0.003 90);
+  /* 深松墨绿 */
+  --foreground: oklch(0.26 0.03 168);
+  --ink: oklch(0.26 0.03 168);
+  /* 雾青 */
+  --mist: oklch(0.72 0.03 178);
+  /* 浅石灰 */
+  --stone-bg: oklch(0.92 0.006 96);
+  /* 土金色品牌色 */
+  --brand: oklch(0.52 0.12 75);
+
   --card: oklch(0.995 0.002 90);
-  --card-foreground: oklch(0.22 0.01 60);
+  --card-foreground: oklch(0.26 0.03 168);
   --popover: oklch(0.995 0.002 90);
-  --popover-foreground: oklch(0.22 0.01 60);
+  --popover-foreground: oklch(0.26 0.03 168);
   --primary: oklch(0.52 0.12 75);
   --primary-foreground: oklch(0.99 0.005 90);
-  --secondary: oklch(0.95 0.01 80);
+  --secondary: oklch(0.95 0.008 90);
   --secondary-foreground: oklch(0.35 0.02 60);
-  --muted: oklch(0.955 0.008 85);
-  --muted-foreground: oklch(0.5 0.015 60);
-  --accent: oklch(0.94 0.015 80);
-  --accent-foreground: oklch(0.22 0.01 60);
+  --muted: oklch(0.96 0.004 90);
+  --muted-foreground: oklch(0.52 0.02 168);
+  --accent: oklch(0.94 0.01 80);
+  --accent-foreground: oklch(0.26 0.03 168);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.9 0.015 80);
-  --input: oklch(0.92 0.01 80);
+  --border: oklch(0.9 0.01 90);
+  --input: oklch(0.92 0.008 90);
   --ring: oklch(0.52 0.12 75);
 }
 
@@ -89,10 +87,11 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "Noto Sans SC", "PingFang SC", "Inter", sans-serif;
+    font-family: "Noto Sans SC", "Inter", sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    line-height: 1.6;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -101,141 +100,72 @@
   }
 }
 
-/* ---------- 字体系统 ---------- */
+/* ══════════ 字体系统 ══════════ */
 .font-display {
-  font-family: "Noto Serif SC", "Songti SC", serif;
-  font-weight: 700;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 900;
   letter-spacing: 0.02em;
 }
-
 .font-serif-title {
-  font-family: "Noto Serif SC", "Songti SC", serif;
-  font-weight: 600;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
 }
-
 .font-label {
   font-family: "Inter", "Noto Sans SC", sans-serif;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
-
 .font-num {
   font-family: "Inter", sans-serif;
   font-variant-numeric: tabular-nums;
 }
-
-/* ---------- 传统纹样装饰 ---------- */
-.pattern-border-top {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='8' viewBox='0 0 120 8'%3E%3Cpath d='M0 4 Q15 0 30 4 T60 4 T90 4 T120 4' fill='none' stroke='%238B6914' stroke-opacity='0.3' stroke-width='1'/%3E%3Cpath d='M0 6 Q15 2 30 6 T60 6 T90 6 T120 6' fill='none' stroke='%238B6914' stroke-opacity='0.15' stroke-width='0.5'/%3E%3C/svg%3E");
-  background-repeat: repeat-x;
-  background-size: 120px 8px;
+.font-body-light {
+  font-family: "Noto Sans SC", sans-serif;
+  font-weight: 300;
 }
 
-.pattern-bg {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%238B6914' stroke-opacity='0.04' stroke-width='0.5'%3E%3Cpath d='M0 100 Q50 80 100 100 T200 100'/%3E%3Cpath d='M0 120 Q50 100 100 120 T200 120'/%3E%3Cpath d='M0 140 Q50 120 100 140 T200 140'/%3E%3Cpath d='M0 60 Q50 40 100 60 T200 60'/%3E%3Cpath d='M0 80 Q50 60 100 80 T200 80'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 200px 200px;
+/* ══════════ 签名元素 ══════════ */
+.contour-bg {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900' viewBox='0 0 900 900'%3E%3Cg fill='none' stroke='%231A2E28' stroke-opacity='0.035' stroke-width='1'%3E%3Cpath d='M0 720 Q 220 640 450 700 T 900 660'/%3E%3Cpath d='M0 770 Q 240 690 460 745 T 900 710'/%3E%3Cpath d='M0 820 Q 260 745 470 795 T 900 760'/%3E%3Cpath d='M120 60 Q 300 20 480 70 T 880 40'/%3E%3Cpath d='M150 115 Q 320 75 500 122 T 900 92'/%3E%3Cpath d='M190 170 Q 350 132 520 175 T 900 145'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 900px 900px;
 }
 
-/* ---------- 动效系统 ---------- */
-:root {
-  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out-soft: cubic-bezier(0.77, 0, 0.175, 1);
+.hairline {
+  height: 1px;
+  background: linear-gradient(to right, oklch(0.26 0.03 168 / 0.18), oklch(0.26 0.03 168 / 0.03));
 }
 
+.brand-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--brand);
+  flex-shrink: 0;
+}
+
+/* ══════════ 动效系统 ══════════ */
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     opacity: 0;
-    transform: translateY(14px);
-    animation: revealUp 0.8s var(--ease-out-quint) both;
+    transform: translateY(18px);
+    animation: revealUp 0.9s var(--ease-out-quint) both;
     animation-delay: calc(var(--d, 0) * 1ms);
   }
-  .fade-in {
-    opacity: 0;
-    animation: fadeIn 0.6s var(--ease-out-quint) both;
-    animation-delay: calc(var(--d, 0) * 1ms);
+  .kenburns {
+    animation: kenburns 18s var(--ease-in-out-soft) both;
   }
 }
 
 @keyframes revealUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes kenburns {
+  from { transform: scale(1.06); }
+  to { transform: scale(1); }
 }
 
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-/* ---------- 细线分隔 ---------- */
-.hairline {
-  height: 1px;
-  background: linear-gradient(to right, oklch(0.52 0.12 75 / 0.25), oklch(0.52 0.12 75 / 0.05));
-}
-
-.hairline-v {
-  width: 1px;
-  background: linear-gradient(to bottom, oklch(0.52 0.12 75 / 0.05), oklch(0.52 0.12 75 / 0.2), oklch(0.52 0.12 75 / 0.05));
-}
-
-/* ---------- 地图容器 ---------- */
-.map-container {
-  position: relative;
-  background: oklch(0.97 0.005 85);
-  border: 1px solid oklch(0.88 0.02 80);
-  border-radius: 0.5rem;
-}
-
-/* ---------- 滚动条美化 ---------- */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: oklch(0.8 0.02 80);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.65 0.04 75);
-}
-
-/* ---------- 容器自定义 ---------- */
-@layer components {
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .flex {
-    min-height: 0;
-    min-width: 0;
-  }
-
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      max-width: 1440px;
-    }
-  }
-}
-
-/* ---------- 开关样式 ---------- */
+/* ══════════ 开关组件 ══════════ */
 .toggle-switch {
   position: relative;
   width: 40px;
@@ -243,12 +173,8 @@
   border-radius: 11px;
   transition: background-color 0.2s;
 }
-.toggle-switch.active {
-  background-color: oklch(0.52 0.12 75);
-}
-.toggle-switch.inactive {
-  background-color: oklch(0.85 0.01 80);
-}
+.toggle-switch.active { background-color: var(--brand); }
+.toggle-switch.inactive { background-color: oklch(0.85 0.01 80); }
 .toggle-switch::after {
   content: '';
   position: absolute;
@@ -261,6 +187,36 @@
   transition: transform 0.2s;
   box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
-.toggle-switch.active::after {
-  transform: translateX(18px);
+.toggle-switch.active::after { transform: translateX(18px); }
+
+/* ══════════ 容器 ══════════ */
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .flex { min-height: 0; min-width: 0; }
+  @media (min-width: 640px) {
+    .container { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .container { padding-left: 2rem; padding-right: 2rem; max-width: 1440px; }
+  }
+}
+
+/* ══════════ 滚动条 ══════════ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: oklch(0.8 0.02 80); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: oklch(0.6 0.04 75); }
+
+/* ══════════ 粒子容器 ══════════ */
+.particles-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }

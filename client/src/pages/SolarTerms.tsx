@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'wouter';
-import { ArrowLeft, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const solarTermsData = [
@@ -31,11 +31,87 @@ const solarTermsData = [
 ];
 
 const seasonThemes = {
-  spring: { bg: '#2D3B2D', glow: '#7CB87C', accent: '#A8D5A0', name: '春', poem: '春风又绿江南岸' },
-  summer: { bg: '#3B3020', glow: '#D4A846', accent: '#F0D4A8', name: '夏', poem: '接天莲叶无穷碧' },
-  autumn: { bg: '#3B2820', glow: '#C87A4A', accent: '#E8B090', name: '秋', poem: '霜叶红于二月花' },
-  winter: { bg: '#252D35', glow: '#7AAAB8', accent: '#B0D4E0', name: '冬', poem: '梅花香自苦寒来' },
+  spring: { gradient: 'from-[#1a2e1a] via-[#2a3d28] to-[#1e3520]', glow: 'rgba(122, 184, 122, 0.12)', particle: '#7CB87C', accent: '#A8D5A0', name: '春', poem: '春风又绿江南岸', textColor: '#C8E6C8' },
+  summer: { gradient: 'from-[#2e2810] via-[#3d3418] to-[#352c12]', glow: 'rgba(212, 168, 70, 0.12)', particle: '#D4A846', accent: '#F0D4A8', name: '夏', poem: '接天莲叶无穷碧', textColor: '#F0E0C0' },
+  autumn: { gradient: 'from-[#2e1e14] via-[#3d2a1a] to-[#352218]', glow: 'rgba(200, 122, 74, 0.12)', particle: '#C87A4A', accent: '#E8B090', name: '秋', poem: '霜叶红于二月花', textColor: '#F0D0B8' },
+  winter: { gradient: 'from-[#1a2530] via-[#222e38] to-[#1e2830]', glow: 'rgba(122, 170, 184, 0.12)', particle: '#7AAAB8', accent: '#B0D4E0', name: '冬', poem: '梅花香自苦寒来', textColor: '#C8E0F0' },
 };
+
+// Canvas粒子系统
+function ParticleCanvas({ season, mousePos }: { season: string; mousePos: { x: number; y: number } }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Array<{ x: number; y: number; vx: number; vy: number; size: number; opacity: number; life: number }>>([]);
+  const animRef = useRef<number>(0);
+  const theme = seasonThemes[season as keyof typeof seasonThemes];
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // 初始化粒子
+    const count = season === 'winter' ? 80 : season === 'autumn' ? 40 : 50;
+    particlesRef.current = Array.from({ length: count }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * (season === 'winter' ? 0.3 : 0.5),
+      vy: season === 'winter' ? Math.random() * 0.8 + 0.2 : season === 'autumn' ? Math.random() * 0.6 + 0.1 : (Math.random() - 0.5) * 0.3,
+      size: Math.random() * (season === 'winter' ? 3 : season === 'spring' ? 4 : 3) + 1,
+      opacity: Math.random() * 0.5 + 0.2,
+      life: Math.random() * 100,
+    }));
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particlesRef.current.forEach((p) => {
+        p.x += p.vx + mousePos.x * 0.3;
+        p.y += p.vy + mousePos.y * 0.1;
+        p.life += 0.5;
+        p.opacity = 0.15 + Math.sin(p.life * 0.02) * 0.15;
+
+        // 边界循环
+        if (p.x > canvas.width + 10) p.x = -10;
+        if (p.x < -10) p.x = canvas.width + 10;
+        if (p.y > canvas.height + 10) p.y = -10;
+        if (p.y < -10) p.y = canvas.height + 10;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = theme.particle + Math.floor(p.opacity * 255).toString(16).padStart(2, '0');
+        ctx.fill();
+
+        // 连线（仅spring和summer）
+        if (season === 'spring' || season === 'summer') {
+          particlesRef.current.forEach((p2) => {
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 100 && dist > 0) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = theme.particle + '08';
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          });
+        }
+      });
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+    return () => cancelAnimationFrame(animRef.current);
+  }, [season, mousePos.x, mousePos.y, theme.particle]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
+}
 
 export default function SolarTermsPage() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -48,7 +124,6 @@ export default function SolarTermsPage() {
   const goNext = useCallback(() => setActiveIndex((prev) => (prev + 1) % 24), []);
   const goPrev = useCallback(() => setActiveIndex((prev) => (prev - 1 + 24) % 24), []);
 
-  // 键盘导航
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goNext();
@@ -58,21 +133,11 @@ export default function SolarTermsPage() {
     return () => window.removeEventListener('keydown', handleKey);
   }, [goNext, goPrev]);
 
-  // 鼠标视差
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMousePos({ x, y });
-  };
-
-  // 滚轮翻页
   useEffect(() => {
     let lastScroll = 0;
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now();
-      if (now - lastScroll < 800) return;
+      if (now - lastScroll < 600) return;
       lastScroll = now;
       if (e.deltaY > 0) goNext();
       else if (e.deltaY < 0) goPrev();
@@ -81,215 +146,200 @@ export default function SolarTermsPage() {
     return () => window.removeEventListener('wheel', handleWheel);
   }, [goNext, goPrev]);
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setMousePos({
+      x: (e.clientX - rect.left) / rect.width - 0.5,
+      y: (e.clientY - rect.top) / rect.height - 0.5,
+    });
+  };
+
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="h-screen w-screen overflow-hidden relative select-none"
-      style={{ backgroundColor: theme.bg, transition: 'background-color 0.8s ease' }}
+      className={`h-screen w-screen overflow-hidden relative select-none bg-gradient-to-br ${theme.gradient}`}
+      style={{ transition: 'all 1s ease' }}
     >
-      {/* 背景光晕 */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(ellipse 60% 50% at ${50 + mousePos.x * 10}% ${50 + mousePos.y * 10}%, ${theme.glow}15 0%, transparent 70%)`,
-          transition: 'background 0.3s ease',
-        }}
-      />
+      {/* 粒子背景 */}
+      <ParticleCanvas season={activeTerm.season} mousePos={mousePos} />
+
+      {/* 雾气纹理叠加 */}
+      <div className="absolute inset-0 opacity-[0.04]" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`,
+      }} />
 
       {/* 顶部导航 */}
-      <div className="absolute top-0 left-0 right-0 z-50 px-8 py-5 flex items-center justify-between">
+      <header className="absolute top-0 left-0 right-0 z-50 px-10 py-6 flex items-center justify-between">
         <Link href="/">
-          <button className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors">
+          <button className="flex items-center gap-2 text-sm text-white/50 hover:text-white/80 transition-colors">
             <ArrowLeft className="w-4 h-4" />
-            返回地图
+            <span className="font-body-light">返回</span>
           </button>
         </Link>
         <div className="text-center">
-          <p className="font-label text-[9px] tracking-[0.4em] text-white/40">TWENTY-FOUR SOLAR TERMS</p>
-          <p className="text-sm text-white/70 mt-0.5 font-serif-title">二十四节气 · 花志</p>
+          <p className="font-label text-[9px] tracking-[0.4em] text-white/30">TWENTY-FOUR SOLAR TERMS</p>
+          <p className="text-xs text-white/50 mt-1 font-serif-title">二十四节气 · 花志</p>
         </div>
-        <div className="font-num text-sm text-white/40">
-          {String(activeIndex + 1).padStart(2, '0')} / 24
+        <div className="font-num text-sm text-white/30">
+          <span className="text-white/70 text-lg">{String(activeIndex + 1).padStart(2, '0')}</span>
+          <span className="mx-1">/</span>
+          <span>24</span>
         </div>
-      </div>
+      </header>
 
-      {/* 主内容区 */}
+      {/* 主内容 */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
-          className="absolute inset-0 flex items-center justify-center"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+          className="absolute inset-0 flex items-center justify-center px-16"
         >
-          <div className="flex items-center gap-16 max-w-[1200px] w-full px-12">
-            {/* 左侧 - 植物画（带视差和光效） */}
+          <div className="flex items-center gap-20 max-w-[1200px] w-full">
+            {/* 左侧植物画 */}
             <div className="flex-1 flex items-center justify-center relative">
-              {/* 光晕底座 */}
+              {/* 光晕 */}
               <div
-                className="absolute w-[340px] h-[340px] rounded-full blur-[80px] opacity-30"
+                className="absolute w-[300px] h-[300px] rounded-full blur-[100px]"
                 style={{
-                  backgroundColor: theme.glow,
-                  transform: `translate(${mousePos.x * -20}px, ${mousePos.y * -20}px)`,
-                  transition: 'transform 0.4s ease-out',
+                  backgroundColor: theme.glow.replace('0.12', '0.2'),
+                  transform: `translate(${mousePos.x * -25}px, ${mousePos.y * -25}px)`,
+                  transition: 'transform 0.5s ease-out, background-color 1s',
                 }}
               />
-              {/* 外圈装饰 */}
+              {/* 装饰环 */}
               <div
-                className="absolute w-[380px] h-[380px] rounded-full border border-white/[0.06]"
+                className="absolute w-[360px] h-[360px] rounded-full"
                 style={{
-                  transform: `translate(${mousePos.x * -8}px, ${mousePos.y * -8}px) rotate(${mousePos.x * 5}deg)`,
-                  transition: 'transform 0.5s ease-out',
-                }}
-              />
-              <div
-                className="absolute w-[420px] h-[420px] rounded-full border border-white/[0.03]"
-                style={{
-                  transform: `translate(${mousePos.x * -12}px, ${mousePos.y * -12}px) rotate(${mousePos.x * -3}deg)`,
+                  border: `1px solid ${theme.accent}15`,
+                  transform: `translate(${mousePos.x * -10}px, ${mousePos.y * -10}px) rotate(${mousePos.x * 8}deg)`,
                   transition: 'transform 0.6s ease-out',
                 }}
               />
-              {/* 植物画主体 */}
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-                className="relative z-10 w-[300px] h-[400px]"
+              <div
+                className="absolute w-[400px] h-[400px] rounded-full"
                 style={{
-                  transform: `translate(${mousePos.x * 15}px, ${mousePos.y * 15}px) rotateY(${mousePos.x * 5}deg) rotateX(${mousePos.y * -5}deg)`,
+                  border: `1px solid ${theme.accent}08`,
+                  transform: `translate(${mousePos.x * -15}px, ${mousePos.y * -15}px) rotate(${mousePos.x * -5}deg)`,
+                  transition: 'transform 0.7s ease-out',
+                }}
+              />
+              {/* 植物画 */}
+              <motion.div
+                initial={{ y: 30, opacity: 0, rotateY: -5 }}
+                animate={{ y: 0, opacity: 1, rotateY: 0 }}
+                transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1], delay: 0.1 }}
+                className="relative z-10 w-[280px] h-[380px]"
+                style={{
+                  transform: `perspective(1200px) translate(${mousePos.x * 20}px, ${mousePos.y * 20}px) rotateY(${mousePos.x * 6}deg) rotateX(${mousePos.y * -4}deg)`,
                   transition: 'transform 0.3s ease-out',
-                  perspective: '1000px',
                 }}
               >
                 <img
                   src={activeTerm.icon}
                   alt={activeTerm.plant}
                   className="w-full h-full object-contain"
-                  style={{ filter: `drop-shadow(0 0 40px ${theme.glow}40)` }}
+                  style={{ filter: `drop-shadow(0 0 60px ${theme.glow.replace('0.12', '0.3')})` }}
                 />
               </motion.div>
             </div>
 
-            {/* 右侧 - 文字信息 */}
-            <div className="flex-1 max-w-[440px]">
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                {/* 季节标签 */}
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-serif-title" style={{ backgroundColor: theme.glow + '20', color: theme.accent, border: `1px solid ${theme.glow}40` }}>
-                    {theme.name}
-                  </span>
-                  <span className="font-label text-[9px] tracking-[0.3em]" style={{ color: theme.accent + 'aa' }}>
-                    {activeTerm.latin}
-                  </span>
-                </div>
+            {/* 右侧文字 */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.23, 1, 0.32, 1] }}
+              className="flex-1 max-w-[420px]"
+            >
+              {/* 季节 */}
+              <div className="flex items-center gap-3 mb-8">
+                <span className="brand-dot" style={{ background: theme.accent }} />
+                <span className="font-label text-[10px] tracking-[0.3em]" style={{ color: theme.accent + 'cc' }}>
+                  {activeTerm.latin} · {theme.name}
+                </span>
+              </div>
 
-                {/* 节气名 - 超大 */}
-                <h1 className="font-display text-7xl text-white mb-3 leading-none">{activeTerm.name}</h1>
+              {/* 节气名 */}
+              <h1 className="font-display text-[72px] leading-none mb-4" style={{ color: theme.textColor }}>
+                {activeTerm.name}
+              </h1>
 
-                {/* 物候 */}
-                <p className="font-serif-title text-lg mb-8 italic" style={{ color: theme.accent }}>
-                  「{activeTerm.desc}」
-                </p>
+              {/* 物候 */}
+              <p className="font-serif-title text-xl mb-10 leading-relaxed" style={{ color: theme.accent }}>
+                {activeTerm.desc}
+              </p>
 
-                {/* 分隔线 */}
-                <div className="w-16 h-[1px] mb-8" style={{ background: `linear-gradient(to right, ${theme.accent}, transparent)` }} />
+              {/* hairline */}
+              <div className="w-20 h-px mb-8" style={{ background: `linear-gradient(to right, ${theme.accent}60, transparent)` }} />
 
-                {/* 信息 */}
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center gap-4">
-                    <span className="text-xs text-white/40 w-16">时令</span>
-                    <span className="text-sm text-white/80">{activeTerm.date}</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-xs text-white/40 w-16">花信</span>
-                    <span className="text-sm text-white/80">{activeTerm.plant}</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-xs text-white/40 w-16">湖南农事</span>
-                    <span className="text-sm text-white/80">{activeTerm.farming}</span>
-                  </div>
-                </div>
+              {/* 信息 */}
+              <div className="space-y-5 mb-10">
+                <InfoRow label="时令" value={activeTerm.date} accent={theme.accent} />
+                <InfoRow label="花信" value={activeTerm.plant} accent={theme.accent} />
+                <InfoRow label="湖南农事" value={activeTerm.farming} accent={theme.accent} />
+              </div>
 
-                {/* 诗句 */}
-                <p className="text-xs text-white/30 italic">— {theme.poem}</p>
-              </motion.div>
-            </div>
+              {/* 诗句 */}
+              <p className="text-xs italic" style={{ color: theme.accent + '50' }}>
+                — {theme.poem}
+              </p>
+            </motion.div>
           </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* 底部导航 - 节气圆环选择器 */}
-      <div className="absolute bottom-6 left-0 right-0 z-50">
-        <div className="flex items-center justify-center gap-1 px-8">
-          <button onClick={goPrev} className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:border-white/50 hover:bg-white/5 transition-all mr-3">
-            <ChevronLeft className="w-4 h-4 text-white/60" />
-          </button>
-          
+      {/* 底部导航 */}
+      <nav className="absolute bottom-8 left-0 right-0 z-50 flex items-center justify-center gap-2 px-16">
+        <button onClick={goPrev} className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center hover:border-white/40 hover:bg-white/5 transition-all">
+          <ChevronLeft className="w-4 h-4 text-white/50" />
+        </button>
+        <div className="flex items-center gap-[3px] mx-4">
           {solarTermsData.map((term, i) => {
+            const t = seasonThemes[term.season as keyof typeof seasonThemes];
             const isActive = i === activeIndex;
-            const termTheme = seasonThemes[term.season as keyof typeof seasonThemes];
             return (
               <button
                 key={i}
                 onClick={() => setActiveIndex(i)}
-                className="relative group"
+                className="group relative"
                 title={term.name}
               >
                 <div
-                  className="w-2 h-2 rounded-full transition-all duration-300"
+                  className="h-1.5 rounded-full transition-all duration-500"
                   style={{
-                    backgroundColor: isActive ? termTheme.accent : 'rgba(255,255,255,0.2)',
-                    transform: isActive ? 'scale(2)' : 'scale(1)',
-                    boxShadow: isActive ? `0 0 12px ${termTheme.glow}60` : 'none',
+                    width: isActive ? '24px' : '6px',
+                    backgroundColor: isActive ? t.accent : 'rgba(255,255,255,0.15)',
+                    boxShadow: isActive ? `0 0 8px ${t.particle}50` : 'none',
                   }}
                 />
-                {/* 悬浮提示 */}
-                <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] text-white/70 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  {term.name}
-                </span>
               </button>
             );
           })}
-
-          <button onClick={goNext} className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center hover:border-white/50 hover:bg-white/5 transition-all ml-3">
-            <ChevronRight className="w-4 h-4 text-white/60" />
-          </button>
         </div>
+        <button onClick={goNext} className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center hover:border-white/40 hover:bg-white/5 transition-all">
+          <ChevronRight className="w-4 h-4 text-white/50" />
+        </button>
+      </nav>
 
-        {/* 操作提示 */}
-        <p className="text-center text-[10px] text-white/25 mt-3 flex items-center justify-center gap-4">
-          <span>← → 键盘翻页</span>
-          <span>·</span>
-          <span>滚轮切换</span>
-          <span>·</span>
-          <span>鼠标移动视差</span>
-        </p>
-      </div>
-
-      {/* 左侧季节指示器 */}
-      <div className="absolute left-8 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3">
+      {/* 左侧季节快捷 */}
+      <div className="absolute left-10 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-4">
         {(['spring', 'summer', 'autumn', 'winter'] as const).map((s) => {
           const sm = seasonThemes[s];
-          const isCurrentSeason = activeTerm.season === s;
+          const isCurrent = activeTerm.season === s;
           return (
             <button
               key={s}
-              onClick={() => {
-                const firstOfSeason = solarTermsData.findIndex(t => t.season === s);
-                setActiveIndex(firstOfSeason);
-              }}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-serif-title transition-all duration-300"
+              onClick={() => setActiveIndex(solarTermsData.findIndex(t => t.season === s))}
+              className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-serif-title transition-all duration-500"
               style={{
-                backgroundColor: isCurrentSeason ? sm.glow + '30' : 'transparent',
-                border: `1px solid ${isCurrentSeason ? sm.accent : 'rgba(255,255,255,0.15)'}`,
-                color: isCurrentSeason ? sm.accent : 'rgba(255,255,255,0.4)',
-                transform: isCurrentSeason ? 'scale(1.15)' : 'scale(1)',
+                backgroundColor: isCurrent ? sm.accent + '25' : 'transparent',
+                border: `1px solid ${isCurrent ? sm.accent + '60' : 'rgba(255,255,255,0.1)'}`,
+                color: isCurrent ? sm.accent : 'rgba(255,255,255,0.3)',
+                transform: isCurrent ? 'scale(1.2)' : 'scale(1)',
               }}
             >
               {sm.name}
@@ -298,12 +348,25 @@ export default function SolarTermsPage() {
         })}
       </div>
 
-      {/* 右侧序号 */}
-      <div className="absolute right-8 top-1/2 -translate-y-1/2 z-40">
-        <span className="font-num text-8xl font-bold text-white/[0.04] leading-none">
-          {String(activeIndex + 1).padStart(2, '0')}
-        </span>
+      {/* 操作提示 */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-40">
+        <p className="text-[9px] text-white/20 flex items-center gap-3">
+          <span>← → 翻页</span>
+          <span>·</span>
+          <span>滚轮切换</span>
+          <span>·</span>
+          <span>移动鼠标探索</span>
+        </p>
       </div>
+    </div>
+  );
+}
+
+function InfoRow({ label, value, accent }: { label: string; value: string; accent: string }) {
+  return (
+    <div className="flex items-baseline gap-5">
+      <span className="text-xs w-14 flex-shrink-0" style={{ color: accent + '60' }}>{label}</span>
+      <span className="text-sm text-white/80 font-body-light">{value}</span>
     </div>
   );
 }
