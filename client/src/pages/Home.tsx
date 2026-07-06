@@ -65,62 +65,77 @@ export default function Home() {
             backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.5\'/%3E%3C/svg%3E")',
           }} />
         </div>
-        <div className="relative px-5 py-3 flex items-center justify-between">
+        <div className="relative px-5 py-2.5 flex items-center justify-between">
           {/* Logo + 标题 */}
           <div className="flex items-center gap-3">
             <Link href="/">
-              <motion.div whileHover={{ x: -2 }} className="w-9 h-9 rounded-lg flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/15 transition-colors cursor-pointer">
-                <img src="/manus-storage/logo-seal_af439230.png" alt="" className="w-6 h-6 object-cover rounded" />
+              <motion.div whileHover={{ scale: 1.05 }} className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/20 transition-all cursor-pointer shadow-sm">
+                <img src="/manus-storage/logo-seal_af439230.png" alt="" className="w-7 h-7 object-cover rounded" />
               </motion.div>
             </Link>
             <div>
-              <h1 className="font-serif-title text-sm text-white tracking-wide">湖南省农耕文化地图</h1>
+              <h1 className="font-serif-title text-[15px] text-white tracking-wide">湖南省农耕文化地图</h1>
               <p className="text-[10px] text-white/50">万年稻作，始于湖湘</p>
             </div>
           </div>
 
-          {/* 导航 */}
-          <nav className="hidden lg:flex items-center gap-5">
+          {/* 中间导航按钮组 - 核心功能入口 */}
+          <nav className="hidden lg:flex items-center gap-1.5 bg-white/[0.07] rounded-xl p-1 border border-white/10">
             {[
-              { label: '主题线路', href: '/routes' },
-              { label: '发展脉络', href: '/timeline' },
-              { label: '重要文物', href: '/artifacts' },
-              { label: '节气日历', href: '/solar-terms' },
+              { label: '地图浏览', href: '/map', icon: '🗺️', active: true },
+              { label: '主题线路', href: '/routes', icon: '🛤️', active: false },
+              { label: '发展脉络', href: '/timeline', icon: '📜', active: false },
+              { label: '重要文物', href: '/artifacts', icon: '🏺', active: false },
+              { label: '节气日历', href: '/solar-terms', icon: '🌾', active: false },
             ].map((item) => (
               <Link key={item.href} href={item.href}>
-                <span className="text-xs text-white/60 hover:text-white transition-colors cursor-pointer">{item.label}</span>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[11px] font-medium transition-all ${
+                    item.active
+                      ? 'bg-white/15 text-white shadow-sm border border-white/15'
+                      : 'text-white/55 hover:text-white/85 hover:bg-white/[0.06]'
+                  }`}
+                >
+                  <span className="text-sm">{item.icon}</span>
+                  <span>{item.label}</span>
+                </motion.button>
               </Link>
             ))}
           </nav>
 
-          {/* 统计 + 切换 */}
-          <div className="flex items-center gap-4">
+          {/* 右侧：统计 + 切换 + 分享 */}
+          <div className="flex items-center gap-3">
             {/* 统计数据 */}
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden xl:flex items-center gap-3 mr-2">
               {[
                 { value: '128', unit: '处', label: '文化点位' },
                 { value: '3', unit: '条', label: '线路' },
                 { value: '24', unit: '件', label: '文物' },
-              ].map((s) => (
-                <div key={s.label} className="text-center">
-                  <span className="font-num text-base font-bold text-white">{s.value}</span>
-                  <span className="text-[9px] text-white/40 ml-0.5">{s.unit}</span>
-                  <p className="text-[8px] text-white/30">{s.label}</p>
+              ].map((s, i) => (
+                <div key={s.label} className="flex items-center gap-1">
+                  <span className="font-num text-lg font-bold text-white">{s.value}</span>
+                  <div>
+                    <span className="text-[9px] text-white/50 block leading-tight">{s.unit}</span>
+                    <span className="text-[8px] text-white/30 block leading-tight">{s.label}</span>
+                  </div>
+                  {i < 2 && <span className="w-px h-5 bg-white/10 ml-2" />}
                 </div>
               ))}
             </div>
 
-            {/* 颜色切换按钮 - 明显位置 */}
-            <div className="flex items-center gap-1 bg-white/10 rounded-lg p-0.5 border border-white/10">
+            {/* 颜色切换按钮 */}
+            <div className="flex items-center gap-0.5 bg-white/[0.08] rounded-lg p-0.5 border border-white/10">
               <button
                 onClick={() => setMapTheme('gold')}
-                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[10px] font-medium transition-all ${mapTheme === 'gold' ? 'bg-[#C4A86B] text-white shadow-sm' : 'text-white/60 hover:text-white/80'}`}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-[10px] font-medium transition-all ${mapTheme === 'gold' ? 'bg-[#C4A86B] text-white shadow-sm' : 'text-white/50 hover:text-white/80'}`}
               >
                 <Palette className="w-3 h-3" />暖金
               </button>
               <button
                 onClick={() => setMapTheme('green')}
-                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[10px] font-medium transition-all ${mapTheme === 'green' ? 'bg-[#4A8C5C] text-white shadow-sm' : 'text-white/60 hover:text-white/80'}`}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-[10px] font-medium transition-all ${mapTheme === 'green' ? 'bg-[#4A8C5C] text-white shadow-sm' : 'text-white/50 hover:text-white/80'}`}
               >
                 <Palette className="w-3 h-3" />墨绿
               </button>
