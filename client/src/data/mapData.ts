@@ -84,6 +84,7 @@ export const mapPoints: MapPoint[] = [
     period: '距今约9000年',
     description: '彭头山遗址是长江中游目前所知最早的新石器时代定居聚落，发现了世界上最早的稻作农业痕迹——稻壳与谷粒。',
     tags: ['新石器时代', '稻作起源', '定居聚落'],
+    image: '/manus-storage/artifact-pottery_8fb6ead8.png',
   },
   {
     id: 'ancient-3',
@@ -94,6 +95,7 @@ export const mapPoints: MapPoint[] = [
     period: '距今14000-12000年',
     description: '道县玉蟾岩遗址发现了目前世界上最早的人工栽培稻标本，将人类稻作农业起源追溯到14000年前。',
     tags: ['旧石器晚期', '稻作起源', '世界之最'],
+    image: '/manus-storage/artifact-pottery_8fb6ead8.png',
   },
   {
     id: 'ancient-4',
@@ -104,6 +106,7 @@ export const mapPoints: MapPoint[] = [
     period: '距今7800-6300年',
     description: '洪江高庙遗址出土了精美的白陶祭器，展现了沅水流域先民的精神世界和农耕祭祀文化。',
     tags: ['新石器时代', '白陶文化', '祭祀遗存'],
+    image: '/manus-storage/artifact-bronze_bae410ed.png',
   },
   {
     id: 'ancient-5',
@@ -187,6 +190,7 @@ export const mapPoints: MapPoint[] = [
     period: '现代',
     description: '中国种业科技创新中心，致力于杂交水稻等农作物新品种研发与产业化推广。',
     tags: ['种业科技', '产业化', '创新中心'],
+    image: '/manus-storage/route-digital-agri_5b60b9e1.png',
   },
   {
     id: 'modern-3',
@@ -217,6 +221,7 @@ export const mapPoints: MapPoint[] = [
     period: '2013年至今',
     description: '精准扶贫首倡地，通过发展特色农业（猕猴桃、苗绣等）实现了脱贫致富，成为乡村振兴典范。',
     tags: ['精准扶贫', '乡村振兴', '特色产业'],
+    image: '/manus-storage/route-digital-agri_5b60b9e1.png',
   },
   {
     id: 'modern-6',
@@ -289,6 +294,7 @@ export const mapPoints: MapPoint[] = [
     period: '1927年',
     description: '1927年秋收起义部队在此会师，开创了农村包围城市的革命道路。',
     tags: ['秋收起义', '革命转折', '农村革命'],
+    image: '/manus-storage/route-red-farming_f5e3b8b0.png',
   },
   {
     id: 'red-3',
@@ -339,6 +345,7 @@ export const mapPoints: MapPoint[] = [
     period: '1934年',
     description: '"半条被子"故事发生地，三位女红军与村民徐解秀的感人故事，诠释了军民鱼水情。',
     tags: ['半条被子', '军民情深', '长征故事'],
+    image: '/manus-storage/route-red-farming_f5e3b8b0.png',
   },
   {
     id: 'red-8',

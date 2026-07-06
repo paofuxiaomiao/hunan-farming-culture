@@ -9,7 +9,7 @@ export default function Home() {
   const [selectedPoint, setSelectedPoint] = useState<string | null>('ancient-1');
   const [layers, setLayers] = useState({ ancient: true, modern: true, red: true });
   const [searchText, setSearchText] = useState('');
-  const [showDetail, setShowDetail] = useState(true);
+  const [showDetail, setShowDetail] = useState(false);
   const [mapTheme, setMapTheme] = useState<'green' | 'gold'>('gold');
   const [likes, setLikes] = useState<Record<string, number>>({});
 
@@ -261,7 +261,7 @@ export default function Home() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 20, opacity: 0 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="absolute top-4 right-4 bottom-4 w-[300px] bg-white/98 backdrop-blur-md border border-[#E8E0D8] rounded-xl overflow-hidden flex flex-col z-40 shadow-xl"
+                className="absolute top-3 right-3 w-[300px] max-h-[calc(100%-24px)] bg-white/98 backdrop-blur-md border border-[#E8E0D8] rounded-xl overflow-hidden flex flex-col z-40 shadow-xl"
               >
                 {/* 头部 */}
                 <div className="px-4 py-3 border-b border-[#E8E0D8] flex items-center justify-between bg-gradient-to-r from-[#FAF7F0] to-white">
