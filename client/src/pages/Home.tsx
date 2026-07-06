@@ -78,17 +78,17 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex flex-col bg-[#1A1A1A]">
+    <div className="h-screen w-screen overflow-hidden flex flex-col bg-[#141210]">
       {/* 顶部导航条 */}
-      <header className="h-14 bg-[#1E2A20] flex items-center px-5 gap-4 flex-shrink-0 border-b border-[#2A3A2C] z-50">
+      <header className="h-14 bg-[#1C1A17] flex items-center px-5 gap-4 flex-shrink-0 border-b border-[#2A2720] z-50">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded overflow-hidden border border-[#4A6B4A]/40">
+          <div className="w-8 h-8 rounded overflow-hidden border border-[#C4A86B]/30">
             <img src="/manus-storage/logo-seal_af439230.png" alt="" className="w-full h-full object-cover" />
           </div>
           <div>
             <h1 className="font-serif-title text-sm text-[#E8D5A8] leading-tight">湖南省农耕文化地图</h1>
-            <p className="text-[10px] text-[#8B9B8B]">万年稻作，始于湖湘</p>
+            <p className="text-[10px] text-[#8B8070]">万年稻作，始于湖湘</p>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export default function Home() {
             { label: '节气日历', href: '/solar-terms' },
           ].map((item) => (
             <Link key={item.href} href={item.href}>
-              <span className="text-xs text-[#A8B8A8] hover:text-[#E8D5A8] transition-colors cursor-pointer">{item.label}</span>
+              <span className="text-xs text-[#B8AFA8] hover:text-[#E8D5A8] transition-colors cursor-pointer">{item.label}</span>
             </Link>
           ))}
         </nav>
@@ -116,8 +116,8 @@ export default function Home() {
           ].map((s) => (
             <div key={s.label} className="flex items-baseline gap-1">
               <span className="font-num text-base font-semibold text-[#E8D5A8]">{s.value}</span>
-              <span className="text-[10px] text-[#8B9B8B]">{s.unit}</span>
-              <span className="text-[10px] text-[#6B7B6B] ml-0.5">{s.label}</span>
+              <span className="text-[10px] text-[#8B8070]">{s.unit}</span>
+              <span className="text-[10px] text-[#6B6560] ml-0.5">{s.label}</span>
             </div>
           ))}
         </div>
@@ -126,9 +126,9 @@ export default function Home() {
       {/* 主内容区 - 全屏地图 + 左侧面板 */}
       <div className="flex-1 flex relative overflow-hidden">
         {/* 左侧面板 */}
-        <aside className="w-[260px] flex-shrink-0 bg-[#1A2A1C]/95 backdrop-blur-md border-r border-[#2A3A2C] flex flex-col z-40">
+        <aside className="w-[260px] flex-shrink-0 bg-[#1A1815]/95 backdrop-blur-md border-r border-[#2A2720] flex flex-col z-40">
           {/* 图层控制 */}
-          <div className="p-4 border-b border-[#2A3A2C]">
+          <div className="p-4 border-b border-[#2A2720]">
             <div className="flex items-center gap-2 mb-3">
               <Layers className="w-3.5 h-3.5 text-[#8B6914]" />
               <span className="text-xs text-[#C4A86B] font-medium">图层控制</span>
@@ -141,15 +141,15 @@ export default function Home() {
           </div>
 
           {/* 搜索 */}
-          <div className="px-4 py-3 border-b border-[#2A3A2C]">
-            <div className="flex items-center bg-[#0D1A0E] border border-[#2A3A2C] rounded px-2.5 py-1.5">
-              <Search className="w-3.5 h-3.5 text-[#6B7B6B]" />
+          <div className="px-4 py-3 border-b border-[#2A2720]">
+            <div className="flex items-center bg-[#0D0C0A] border border-[#2A2720] rounded px-2.5 py-1.5">
+              <Search className="w-3.5 h-3.5 text-[#6B6560]" />
               <input
                 type="text"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder="搜索点位名称..."
-                className="flex-1 ml-2 text-xs bg-transparent outline-none text-[#C8D8C8] placeholder-[#4A5A4A]"
+                className="flex-1 ml-2 text-xs bg-transparent outline-none text-[#D8D0C8] placeholder-[#4A5A4A]"
               />
             </div>
           </div>
@@ -163,23 +163,23 @@ export default function Home() {
                   onClick={() => flyToPoint(point)}
                   className={`w-full text-left px-3 py-2.5 rounded-md flex items-center gap-2.5 transition-all duration-200 group ${
                     selectedPoint === point.id
-                      ? 'bg-[#2A3A2C] border border-[#4A6B4A]'
-                      : 'hover:bg-[#1E2E20] border border-transparent'
+                      ? 'bg-[#2A2720] border border-[#5A4A30]'
+                      : 'hover:bg-[#1E1C18] border border-transparent'
                   }`}
                 >
-                  <span className="w-2.5 h-2.5 rounded-full flex-shrink-0 ring-2 ring-offset-1 ring-offset-[#1A2A1C]" style={{ backgroundColor: getPointColor(point.type) }} />
+                  <span className="w-2.5 h-2.5 rounded-full flex-shrink-0 ring-2 ring-offset-1 ring-offset-[#1A1815]" style={{ backgroundColor: getPointColor(point.type) }} />
                   <div className="flex-1 min-w-0">
-                    <p className={`text-xs truncate ${selectedPoint === point.id ? 'text-[#E8D5A8]' : 'text-[#A8B8A8] group-hover:text-[#C8D8C8]'}`}>{point.name}</p>
-                    <p className="text-[10px] text-[#5A6A5A] truncate">{point.period}</p>
+                    <p className={`text-xs truncate ${selectedPoint === point.id ? 'text-[#E8D5A8]' : 'text-[#B8AFA8] group-hover:text-[#D8D0C8]'}`}>{point.name}</p>
+                    <p className="text-[10px] text-[#5A5550] truncate">{point.period}</p>
                   </div>
-                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-opacity ${selectedPoint === point.id ? 'text-[#8B6914] opacity-100' : 'opacity-0 group-hover:opacity-50 text-[#6B7B6B]'}`} />
+                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-opacity ${selectedPoint === point.id ? 'text-[#8B6914] opacity-100' : 'opacity-0 group-hover:opacity-50 text-[#6B6560]'}`} />
                 </button>
               ))}
             </div>
           </div>
 
           {/* 底部信息 */}
-          <div className="p-3 border-t border-[#2A3A2C] text-[9px] text-[#4A5A4A] text-center">
+          <div className="p-3 border-t border-[#2A2720] text-[9px] text-[#4A4540] text-center">
             数据来源：湖南省文化和旅游厅
           </div>
         </aside>
@@ -194,36 +194,36 @@ export default function Home() {
           />
 
           {/* 图例 - 底部左侧 */}
-          <div className="absolute bottom-4 left-4 bg-[#1A2A1C]/90 backdrop-blur-sm border border-[#2A3A2C] rounded-lg px-4 py-2.5 flex items-center gap-4 z-30">
+          <div className="absolute bottom-4 left-4 bg-[#1A1815]/90 backdrop-blur-sm border border-[#2A2720] rounded-lg px-4 py-2.5 flex items-center gap-4 z-30">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#8B6914]" />
-              <span className="text-[10px] text-[#A8B8A8]">古代遗址</span>
+              <span className="text-[10px] text-[#B8AFA8]">古代遗址</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#4A8C5C]" />
-              <span className="text-[10px] text-[#A8B8A8]">现代地标</span>
+              <span className="text-[10px] text-[#B8AFA8]">现代地标</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#C44545]" />
-              <span className="text-[10px] text-[#A8B8A8]">红色旧址</span>
+              <span className="text-[10px] text-[#B8AFA8]">红色旧址</span>
             </div>
           </div>
 
           {/* 全省总览按钮 */}
           <button
             onClick={() => mapRef.current?.setZoom(7)}
-            className="absolute top-4 right-4 bg-[#1A2A1C]/90 backdrop-blur-sm border border-[#2A3A2C] rounded-lg px-3 py-2 text-xs text-[#A8B8A8] hover:text-[#E8D5A8] hover:border-[#4A6B4A] transition-all z-30"
+            className="absolute top-4 right-4 bg-[#1A1815]/90 backdrop-blur-sm border border-[#2A2720] rounded-lg px-3 py-2 text-xs text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all z-30"
           >
             全省总览
           </button>
 
           {/* 右侧详情面板 */}
           {selected && showDetail && (
-            <div className="absolute top-4 right-4 bottom-4 w-[300px] bg-[#1A2A1C]/95 backdrop-blur-md border border-[#2A3A2C] rounded-xl overflow-hidden flex flex-col z-40 shadow-2xl">
+            <div className="absolute top-4 right-4 bottom-4 w-[300px] bg-[#1A1815]/95 backdrop-blur-md border border-[#2A2720] rounded-xl overflow-hidden flex flex-col z-40 shadow-2xl">
               {/* 头部 */}
-              <div className="px-4 py-3 border-b border-[#2A3A2C] flex items-center justify-between">
+              <div className="px-4 py-3 border-b border-[#2A2720] flex items-center justify-between">
                 <h3 className="font-serif-title text-sm text-[#E8D5A8]">点位详情</h3>
-                <button onClick={() => setShowDetail(false)} className="text-[#6B7B6B] hover:text-[#A8B8A8]">
+                <button onClick={() => setShowDetail(false)} className="text-[#6B6560] hover:text-[#B8AFA8]">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -236,29 +236,29 @@ export default function Home() {
                 </span>
 
                 {selected.image && (
-                  <div className="rounded-lg overflow-hidden mb-3 border border-[#2A3A2C]">
+                  <div className="rounded-lg overflow-hidden mb-3 border border-[#2A2720]">
                     <img src={selected.image} alt={selected.name} className="w-full h-32 object-cover" />
                   </div>
                 )}
 
-                <p className="text-xs text-[#A8B8A8] leading-relaxed mb-3">{selected.description}</p>
+                <p className="text-xs text-[#B8AFA8] leading-relaxed mb-3">{selected.description}</p>
 
                 <div className="flex flex-wrap gap-1.5">
                   {selected.tags.map((tag) => (
-                    <span key={tag} className="px-2 py-0.5 bg-[#2A3A2C] text-[#8B9B8B] text-[10px] rounded border border-[#3A4A3C]">{tag}</span>
+                    <span key={tag} className="px-2 py-0.5 bg-[#2A2720] text-[#8B8070] text-[10px] rounded border border-[#3A3530]">{tag}</span>
                   ))}
                 </div>
               </div>
 
               {/* 操作 */}
-              <div className="px-3 py-2.5 border-t border-[#2A3A2C] flex gap-2">
-                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A3A2C] border border-[#3A4A3C] rounded text-[10px] text-[#A8B8A8] hover:text-[#E8D5A8] hover:border-[#4A6B4A] transition-all">
+              <div className="px-3 py-2.5 border-t border-[#2A2720] flex gap-2">
+                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A2720] border border-[#3A3530] rounded text-[10px] text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all">
                   <ExternalLink className="w-3 h-3" />详情
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A3A2C] border border-[#3A4A3C] rounded text-[10px] text-[#A8B8A8] hover:text-[#E8D5A8] hover:border-[#4A6B4A] transition-all">
+                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A2720] border border-[#3A3530] rounded text-[10px] text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all">
                   <Navigation className="w-3 h-3" />路线
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A3A2C] border border-[#3A4A3C] rounded text-[10px] text-[#A8B8A8] hover:text-[#E8D5A8] hover:border-[#4A6B4A] transition-all">
+                <button className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-[#2A2720] border border-[#3A3530] rounded text-[10px] text-[#B8AFA8] hover:text-[#E8D5A8] hover:border-[#5A4A30] transition-all">
                   <Share2 className="w-3 h-3" />分享
                 </button>
               </div>
@@ -274,9 +274,9 @@ function LayerItem({ color, label, count, active, onToggle }: { color: string; l
   return (
     <button onClick={onToggle} className="w-full flex items-center gap-2.5 group">
       <span className="w-3 h-3 rounded-full flex-shrink-0 transition-opacity" style={{ backgroundColor: color, opacity: active ? 1 : 0.3 }} />
-      <span className={`text-xs flex-1 text-left transition-colors ${active ? 'text-[#C8D8C8]' : 'text-[#5A6A5A]'}`}>{label}</span>
-      <span className="font-num text-[10px] text-[#6B7B6B]">{count}</span>
-      <div className={`w-8 h-[18px] rounded-full relative transition-colors ${active ? 'bg-[#4A6B4A]' : 'bg-[#2A3A2C]'}`}>
+      <span className={`text-xs flex-1 text-left transition-colors ${active ? 'text-[#D8D0C8]' : 'text-[#5A5550]'}`}>{label}</span>
+      <span className="font-num text-[10px] text-[#6B6560]">{count}</span>
+      <div className={`w-8 h-[18px] rounded-full relative transition-colors ${active ? 'bg-[#8B6914]' : 'bg-[#2A2720]'}`}>
         <div className={`absolute top-[2px] w-[14px] h-[14px] rounded-full bg-white shadow-sm transition-transform ${active ? 'left-[18px]' : 'left-[2px]'}`} />
       </div>
     </button>
