@@ -5,13 +5,14 @@ import { MapPin, Route, Landmark, Sun, ArrowRight } from 'lucide-react';
 export default function Landing() {
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-white overflow-hidden relative">
-      {/* 背景山水图 */}
+      {/* 古风稻田画卷背景 */}
       <div
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0"
         style={{
-          backgroundImage: `url(/manus-storage/bg-spring-landscape_0f1564b5.png)`,
+          backgroundImage: `url(/manus-storage/hero-rice-scroll_08a0ead7.png)`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center 60%',
+          backgroundPosition: 'center 40%',
+          opacity: 0.45,
         }}
       />
       {/* 渐变叠加 */}
