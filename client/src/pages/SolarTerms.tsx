@@ -173,8 +173,8 @@ export default function SolarTermsPage() {
           backgroundImage: `url(${theme.bg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          opacity: 0.6,
-          transform: `scale(1.05) translate(${mousePos.x * -8}px, ${mousePos.y * -5}px)`,
+          opacity: 0.72,
+          transform: `scale(1.02) translate(${mousePos.x * -8}px, ${mousePos.y * -5}px)`,
           transition: 'transform 0.8s ease-out, background-image 1s ease',
         }}
       />

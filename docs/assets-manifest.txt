@@ -1,4 +1,6 @@
+artifact-bronze.png
 artifact-bronze.webp
+artifact-pottery.png
 artifact-pottery.webp
 bg-autumn-hd.webp
 bg-autumn-landscape.webp
@@ -8,6 +10,7 @@ bg-summer-hd.webp
 bg-summer-landscape.webp
 bg-winter-hd.webp
 bg-winter-landscape.webp
+hero-rice-scroll.png
 hero-rice-scroll.webp
 hunan-map-bg.webp
 index-CTYPLTLx.js

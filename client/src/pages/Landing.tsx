@@ -10,15 +10,15 @@ export default function Landing() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `url(assets/hero-rice-scroll.webp)`,
+          backgroundImage: `url(assets/hero-rice-scroll.png)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center 40%',
-          opacity: 0.45,
+          opacity: 0.72,
         }}
       />
       {/* 渐变叠加 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0F0F0F]/80 via-[#0F0F0F]/40 to-[#0F0F0F]/90" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0F0F0F]/60 via-transparent to-[#0F0F0F]/60" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0F0F0F]/70 via-[#0F0F0F]/30 to-[#0F0F0F]/82" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0F0F0F]/45 via-transparent to-[#0F0F0F]/45" />
 
       {/* 等高线纹理 */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
