@@ -14,6 +14,7 @@ hero-rice-scroll.png
 hero-rice-scroll.webp
 hunan-map-bg.webp
 index-CTYPLTLx.js
+index-hires-assets.js
 index-uq00wxSc.css
 logo-seal.webp
 logo-seal_original.webp
