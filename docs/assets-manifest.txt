@@ -10,6 +10,8 @@ bg-winter-hd.webp
 bg-winter-landscape.webp
 hero-rice-scroll.webp
 hunan-map-bg.webp
+index-CTYPLTLx.js
+index-uq00wxSc.css
 logo-seal.webp
 logo-seal_original.webp
 lotus-decor.png
