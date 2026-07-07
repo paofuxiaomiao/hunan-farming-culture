@@ -112,7 +112,7 @@ export default function Landing() {
 
       {/* 右侧装饰 - 稻穗 */}
       <div className="absolute top-20 right-0 w-[300px] h-[500px] opacity-[0.08] pointer-events-none">
-        <img src="assets/rice-branch-decor.webp" alt="" className="w-full h-full object-contain" />
+        <img src="assets/rice-branch-decor.png" alt="" className="w-full h-full object-contain" />
       </div>
 
       {/* 向下滚动提示 */}

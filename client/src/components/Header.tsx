@@ -20,7 +20,7 @@ export default function Header() {
         
         {/* 右上角水稻穗装饰 */}
         <div className="absolute -top-4 -right-6 w-36 h-24 opacity-[0.15] pointer-events-none">
-          <img src="assets/rice-branch-decor.webp" alt="" className="w-full h-full object-contain object-right-top" />
+          <img src="assets/rice-branch-decor.png" alt="" className="w-full h-full object-contain object-right-top" />
         </div>
 
         <div className="max-w-[1440px] mx-auto px-6 h-[60px] flex items-center justify-between relative z-10">

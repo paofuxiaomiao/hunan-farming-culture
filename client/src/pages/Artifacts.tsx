@@ -82,7 +82,7 @@ const artifactsData = [
     origin: '娄底新化紫鹊界',
     description: '无需人工修建水库和水渠的自流灌溉系统，利用山体自然渗水原理，是古代农业水利工程的杰出代表。',
     significance: '世界灌溉工程遗产',
-    image: 'assets/route-farming-origin.webp',
+    image: 'assets/route-farming-origin.png',
     category: '水利工程',
   },
 ];

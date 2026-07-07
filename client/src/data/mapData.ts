@@ -73,7 +73,7 @@ export const mapPoints: MapPoint[] = [
     period: '距今6500-7000年',
     description: '城头山遗址距今约6500-5800年，是长江中游地区新石器时代重要的稻作农业遗址之一，出土了大量稻谷、陶器与石器，见证了湖湘先民的稻作文明起源。',
     tags: ['新石器时代', '稻作农业', '环壕聚落', '国家重点文物保护单位'],
-    image: 'assets/route-farming-origin.webp',
+    image: 'assets/route-farming-origin.png',
   },
   {
     id: 'ancient-2',
@@ -117,7 +117,7 @@ export const mapPoints: MapPoint[] = [
     period: '起源先秦，2000余年',
     description: '紫鹊界梯田起源于先秦，盛于宋明，是世界灌溉工程遗产，面积达10万余亩，是南方稻作文化与苗瑶山地渔猎文化交融的历史遗存。',
     tags: ['世界灌溉工程遗产', '梯田农业', '苗瑶文化'],
-    image: 'assets/route-farming-origin.webp',
+    image: 'assets/route-farming-origin.png',
   },
   {
     id: 'ancient-6',
@@ -179,7 +179,7 @@ export const mapPoints: MapPoint[] = [
     period: '1970年代至今',
     description: '袁隆平院士在此进行杂交水稻研发，成功培育出高产杂交水稻品种，为解决世界粮食问题作出了巨大贡献。',
     tags: ['杂交水稻', '袁隆平', '科技创新'],
-    image: 'assets/route-digital-agri.webp',
+    image: 'assets/route-digital-agri.png',
   },
   {
     id: 'modern-2',
@@ -190,7 +190,7 @@ export const mapPoints: MapPoint[] = [
     period: '现代',
     description: '中国种业科技创新中心，致力于杂交水稻等农作物新品种研发与产业化推广。',
     tags: ['种业科技', '产业化', '创新中心'],
-    image: 'assets/route-digital-agri.webp',
+    image: 'assets/route-digital-agri.png',
   },
   {
     id: 'modern-3',
@@ -221,7 +221,7 @@ export const mapPoints: MapPoint[] = [
     period: '2013年至今',
     description: '精准扶贫首倡地，通过发展特色农业（猕猴桃、苗绣等）实现了脱贫致富，成为乡村振兴典范。',
     tags: ['精准扶贫', '乡村振兴', '特色产业'],
-    image: 'assets/route-digital-agri.webp',
+    image: 'assets/route-digital-agri.png',
   },
   {
     id: 'modern-6',
@@ -283,7 +283,7 @@ export const mapPoints: MapPoint[] = [
     period: '1893年-',
     description: '毛泽东同志诞生地，中国农民运动的重要策源地，《湖南农民运动考察报告》在此孕育。',
     tags: ['伟人故里', '农民运动', '红色圣地'],
-    image: 'assets/route-red-farming.webp',
+    image: 'assets/route-red-farming.png',
   },
   {
     id: 'red-2',
@@ -294,7 +294,7 @@ export const mapPoints: MapPoint[] = [
     period: '1927年',
     description: '1927年秋收起义部队在此会师，开创了农村包围城市的革命道路。',
     tags: ['秋收起义', '革命转折', '农村革命'],
-    image: 'assets/route-red-farming.webp',
+    image: 'assets/route-red-farming.png',
   },
   {
     id: 'red-3',
@@ -345,7 +345,7 @@ export const mapPoints: MapPoint[] = [
     period: '1934年',
     description: '"半条被子"故事发生地，三位女红军与村民徐解秀的感人故事，诠释了军民鱼水情。',
     tags: ['半条被子', '军民情深', '长征故事'],
-    image: 'assets/route-red-farming.webp',
+    image: 'assets/route-red-farming.png',
   },
   {
     id: 'red-8',
@@ -385,21 +385,21 @@ export const themeRoutes: ThemeRoute[] = [
     id: 'route-1',
     title: '农耕文明探源',
     subtitle: '探访稻作起源，追溯湖湘农耕文明的千年脉络',
-    image: 'assets/route-farming-origin.webp',
+    image: 'assets/route-farming-origin.png',
     points: ['ancient-3', 'ancient-2', 'ancient-1', 'ancient-5'],
   },
   {
     id: 'route-2',
     title: '数字农旅体验',
     subtitle: '科技赋能乡村，体验现代农业与乡村振兴成果',
-    image: 'assets/route-digital-agri.webp',
+    image: 'assets/route-digital-agri.png',
     points: ['modern-1', 'modern-5', 'modern-6', 'modern-2'],
   },
   {
     id: 'route-3',
     title: '红色农事教育',
     subtitle: '走进红色旧址，传承农耕精神与革命记忆',
-    image: 'assets/route-red-farming.webp',
+    image: 'assets/route-red-farming.png',
     points: ['red-1', 'red-2', 'red-3', 'red-7'],
   },
 ];
