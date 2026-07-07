@@ -3,6 +3,7 @@ import { ArrowLeft, MapPin, Clock, Users } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { themeRoutes, mapPoints } from '@/data/mapData';
+import { routePath } from '@/lib/sitePaths';
 
 export default function ThemeRoutesPage() {
   return (
@@ -12,7 +13,7 @@ export default function ThemeRoutesPage() {
       {/* 页面标题区 */}
       <section className="bg-gradient-to-b from-[#FAF7F0] to-background py-8">
         <div className="max-w-[1200px] mx-auto px-6">
-          <Link href="/">
+          <Link href={routePath("/")}>
             <button className="flex items-center gap-2 text-sm text-[#8B6914] hover:text-[#5C4520] mb-4 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               返回地图

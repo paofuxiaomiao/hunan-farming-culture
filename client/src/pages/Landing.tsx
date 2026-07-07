@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { MapPin, Route, Landmark, Sun, ArrowRight } from 'lucide-react';
+import { routePath } from '@/lib/sitePaths';
 
 export default function Landing() {
   return (
@@ -9,7 +10,7 @@ export default function Landing() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `url(/manus-storage/hero-rice-scroll_08a0ead7.png)`,
+          backgroundImage: `url(assets/hero-rice-scroll.webp)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center 40%',
           opacity: 0.45,
@@ -31,7 +32,7 @@ export default function Landing() {
         <header className="px-10 py-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded overflow-hidden border border-white/10">
-              <img src="/manus-storage/logo-seal_af439230.png" alt="" className="w-full h-full object-cover" />
+              <img src="assets/logo-seal.webp" alt="" className="w-full h-full object-cover" />
             </div>
             <span className="font-label text-[9px] tracking-[0.3em] text-white/40">HUNAN FARMING CULTURE MAP</span>
           </div>
@@ -66,7 +67,7 @@ export default function Landing() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
             >
-              <Link href="/map">
+              <Link href={routePath("/map")}>
                 <button className="group flex items-center gap-3 px-7 py-3.5 bg-[#C4A86B] hover:bg-[#D4B87B] text-[#1A1A1A] rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#C4A86B]/20">
                   进入数字地图看板
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -111,7 +112,7 @@ export default function Landing() {
 
       {/* 右侧装饰 - 稻穗 */}
       <div className="absolute top-20 right-0 w-[300px] h-[500px] opacity-[0.08] pointer-events-none">
-        <img src="/manus-storage/rice-branch-decor_353e9b0d.png" alt="" className="w-full h-full object-contain" />
+        <img src="assets/rice-branch-decor.webp" alt="" className="w-full h-full object-contain" />
       </div>
 
       {/* 向下滚动提示 */}

@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { routePath } from '@/lib/sitePaths';
 
 const timelineData = [
   {
@@ -86,7 +87,7 @@ export default function TimelinePage() {
       {/* 页面标题 */}
       <section className="bg-gradient-to-b from-[#FAF7F0] to-background py-8">
         <div className="max-w-[1000px] mx-auto px-6">
-          <Link href="/">
+          <Link href={routePath("/")}>
             <button className="flex items-center gap-2 text-sm text-[#8B6914] hover:text-[#5C4520] mb-4 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               返回地图

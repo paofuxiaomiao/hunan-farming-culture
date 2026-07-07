@@ -135,7 +135,7 @@ export default function LeafletMap({ layers, selectedPoint, onSelectPoint, theme
       // 湖南省实际边界：纬度 24.63-30.13，经度 108.79-114.26
       const imageBounds: L.LatLngBoundsExpression = [[24.63, 108.79], [30.13, 114.26]];
       L.imageOverlay(
-        '/manus-storage/pasted_file_OB8bxJ_abfb01d69f1697cf031482dcfc5f467f_39577f07.png',
+        'assets/map-mask-ancient.webp',
         imageBounds,
         { opacity: 0.45, interactive: false, className: 'map-watercolor-overlay' }
       ).addTo(map);

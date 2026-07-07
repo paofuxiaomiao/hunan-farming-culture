@@ -2,39 +2,40 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'wouter';
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { routePath } from '@/lib/sitePaths';
 
 const solarTermsData = [
-  { name: '立春', latin: 'LICHUN', date: '2月3-5日', plant: '梅花', desc: '东风解冻，蛰虫始振', farming: '备耕整地，修缮农具', season: 'spring', icon: '/manus-storage/st-lichun_d3da8f1c.png' },
-  { name: '雨水', latin: 'YUSHUI', date: '2月18-20日', plant: '杏花', desc: '獭祭鱼，鸿雁来', farming: '田间排水，育秧准备', season: 'spring', icon: '/manus-storage/st-yushui_8a65af7f.png' },
-  { name: '惊蛰', latin: 'JINGZHE', date: '3月5-7日', plant: '桃花', desc: '桃始华，仓庚鸣', farming: '春耕开始，播种早稻', season: 'spring', icon: '/manus-storage/st-jingzhe_6716d687.png' },
-  { name: '春分', latin: 'CHUNFEN', date: '3月20-22日', plant: '海棠', desc: '玄鸟至，雷乃发声', farming: '水稻育秧，施肥管理', season: 'spring', icon: '/manus-storage/st-chunfen_a442a53d.png' },
-  { name: '清明', latin: 'QINGMING', date: '4月4-6日', plant: '柳', desc: '桐始华，田鼠化为鴽', farming: '插秧播种，茶叶采摘', season: 'spring', icon: '/manus-storage/st-qingming_60bb94b0.png' },
-  { name: '谷雨', latin: 'GUYU', date: '4月19-21日', plant: '牡丹', desc: '萍始生，鸣鸠拂其羽', farming: '秧苗移栽，病虫防治', season: 'spring', icon: '/manus-storage/st-guyu_28442251.png' },
-  { name: '立夏', latin: 'LIXIA', date: '5月5-7日', plant: '蔷薇', desc: '蝼蝈鸣，蚯蚓出', farming: '早稻分蘖，中稻插秧', season: 'summer', icon: '/manus-storage/st-lixia_bf64af47.png' },
-  { name: '小满', latin: 'XIAOMAN', date: '5月20-22日', plant: '石榴', desc: '苦菜秀，靡草死', farming: '田间管理，灌溉施肥', season: 'summer', icon: '/manus-storage/st-xiaoman_fde1bd2c.png' },
-  { name: '芒种', latin: 'MANGZHONG', date: '6月5-7日', plant: '栀子', desc: '螳螂生，鵙始鸣', farming: '抢收抢种，双抢大忙', season: 'summer', icon: '/manus-storage/st-mangzhong_50e03a0f.png' },
-  { name: '夏至', latin: 'XIAZHI', date: '6月21-22日', plant: '荷花', desc: '鹿角解，蝉始鸣', farming: '晚稻插秧，防涝抗旱', season: 'summer', icon: '/manus-storage/st-xiazhi_af545a97.png' },
-  { name: '小暑', latin: 'XIAOSHU', date: '7月6-8日', plant: '茉莉', desc: '温风至，蟋蟀居壁', farming: '中稻抽穗，防治病害', season: 'summer', icon: '/manus-storage/st-xiaoshu_72500ffb.png' },
-  { name: '大暑', latin: 'DASHU', date: '7月22-24日', plant: '紫薇', desc: '腐草为萤，土润溽暑', farming: '双季稻管理，防高温', season: 'summer', icon: '/manus-storage/st-dashu_8512233d.png' },
-  { name: '立秋', latin: 'LIQIU', date: '8月7-9日', plant: '木槿', desc: '凉风至，白露降', farming: '早稻收割，晚稻管理', season: 'autumn', icon: '/manus-storage/st-liqiu_eb0d106f.png' },
-  { name: '处暑', latin: 'CHUSHU', date: '8月22-24日', plant: '向日葵', desc: '鹰乃祭鸟，天地始肃', farming: '晚稻抽穗，秋粮管理', season: 'autumn', icon: '/manus-storage/st-chushu_a9ca5a59.png' },
-  { name: '白露', latin: 'BAILU', date: '9月7-9日', plant: '桂花', desc: '鸿雁来，玄鸟归', farming: '晚稻灌浆，棉花采摘', season: 'autumn', icon: '/manus-storage/st-bailu_39b0d5ed.png' },
-  { name: '秋分', latin: 'QIUFEN', date: '9月22-24日', plant: '菊花', desc: '雷始收声，蛰虫坯户', farming: '秋收秋种，晒谷入仓', season: 'autumn', icon: '/manus-storage/st-qiufen_8bbab5f4.png' },
-  { name: '寒露', latin: 'HANLU', date: '10月7-9日', plant: '芙蓉', desc: '鸿雁来宾，菊有黄华', farming: '晚稻收割，冬种准备', season: 'autumn', icon: '/manus-storage/st-hanlu_2b5d7467.png' },
-  { name: '霜降', latin: 'SHUANGJANG', date: '10月23-24日', plant: '枫叶', desc: '豺乃祭兽，草木黄落', farming: '秋收扫尾，翻耕冬田', season: 'autumn', icon: '/manus-storage/st-shuangjang_41b3c432.png' },
-  { name: '立冬', latin: 'LIDONG', date: '11月7-8日', plant: '山茶', desc: '水始冰，地始冻', farming: '冬种油菜，修建水利', season: 'winter', icon: '/manus-storage/st-lidong_f52cfb1c.png' },
-  { name: '小雪', latin: 'XIAOXUE', date: '11月22-23日', plant: '银杏', desc: '虹藏不见，天气上升', farming: '冬季积肥，农田水利', season: 'winter', icon: '/manus-storage/st-xiaoxue_e6c2750f.png' },
-  { name: '大雪', latin: 'DAXUE', date: '12月6-8日', plant: '腊梅', desc: '鹖鴠不鸣，虎始交', farming: '积肥造肥，兴修水利', season: 'winter', icon: '/manus-storage/st-daxue_b1cf33be.png' },
-  { name: '冬至', latin: 'DONGZHI', date: '12月21-23日', plant: '水仙', desc: '蚯蚓结，麋角解', farming: '冬闲整地，来年规划', season: 'winter', icon: '/manus-storage/st-dongzhi_08cf234b.png' },
-  { name: '小寒', latin: 'XIAOHAN', date: '1月5-7日', plant: '天竺', desc: '雁北乡，鹊始巢', farming: '选种备种，农具修整', season: 'winter', icon: '/manus-storage/st-xiaohan_54abaf6a.png' },
-  { name: '大寒', latin: 'DAHAN', date: '1月20-21日', plant: '瑞香', desc: '鸡始乳，征鸟厉疾', farming: '备春耕物资，迎接新年', season: 'winter', icon: '/manus-storage/st-dahan_842da9ea.png' },
+  { name: '立春', latin: 'LICHUN', date: '2月3-5日', plant: '梅花', desc: '东风解冻，蛰虫始振', farming: '备耕整地，修缮农具', season: 'spring', icon: 'assets/st-lichun.webp' },
+  { name: '雨水', latin: 'YUSHUI', date: '2月18-20日', plant: '杏花', desc: '獭祭鱼，鸿雁来', farming: '田间排水，育秧准备', season: 'spring', icon: 'assets/st-yushui.webp' },
+  { name: '惊蛰', latin: 'JINGZHE', date: '3月5-7日', plant: '桃花', desc: '桃始华，仓庚鸣', farming: '春耕开始，播种早稻', season: 'spring', icon: 'assets/st-jingzhe.webp' },
+  { name: '春分', latin: 'CHUNFEN', date: '3月20-22日', plant: '海棠', desc: '玄鸟至，雷乃发声', farming: '水稻育秧，施肥管理', season: 'spring', icon: 'assets/st-chunfen.webp' },
+  { name: '清明', latin: 'QINGMING', date: '4月4-6日', plant: '柳', desc: '桐始华，田鼠化为鴽', farming: '插秧播种，茶叶采摘', season: 'spring', icon: 'assets/st-qingming.webp' },
+  { name: '谷雨', latin: 'GUYU', date: '4月19-21日', plant: '牡丹', desc: '萍始生，鸣鸠拂其羽', farming: '秧苗移栽，病虫防治', season: 'spring', icon: 'assets/st-guyu.webp' },
+  { name: '立夏', latin: 'LIXIA', date: '5月5-7日', plant: '蔷薇', desc: '蝼蝈鸣，蚯蚓出', farming: '早稻分蘖，中稻插秧', season: 'summer', icon: 'assets/st-lixia.webp' },
+  { name: '小满', latin: 'XIAOMAN', date: '5月20-22日', plant: '石榴', desc: '苦菜秀，靡草死', farming: '田间管理，灌溉施肥', season: 'summer', icon: 'assets/st-xiaoman.webp' },
+  { name: '芒种', latin: 'MANGZHONG', date: '6月5-7日', plant: '栀子', desc: '螳螂生，鵙始鸣', farming: '抢收抢种，双抢大忙', season: 'summer', icon: 'assets/st-mangzhong.webp' },
+  { name: '夏至', latin: 'XIAZHI', date: '6月21-22日', plant: '荷花', desc: '鹿角解，蝉始鸣', farming: '晚稻插秧，防涝抗旱', season: 'summer', icon: 'assets/st-xiazhi.webp' },
+  { name: '小暑', latin: 'XIAOSHU', date: '7月6-8日', plant: '茉莉', desc: '温风至，蟋蟀居壁', farming: '中稻抽穗，防治病害', season: 'summer', icon: 'assets/st-xiaoshu.webp' },
+  { name: '大暑', latin: 'DASHU', date: '7月22-24日', plant: '紫薇', desc: '腐草为萤，土润溽暑', farming: '双季稻管理，防高温', season: 'summer', icon: 'assets/st-dashu.webp' },
+  { name: '立秋', latin: 'LIQIU', date: '8月7-9日', plant: '木槿', desc: '凉风至，白露降', farming: '早稻收割，晚稻管理', season: 'autumn', icon: 'assets/st-liqiu.webp' },
+  { name: '处暑', latin: 'CHUSHU', date: '8月22-24日', plant: '向日葵', desc: '鹰乃祭鸟，天地始肃', farming: '晚稻抽穗，秋粮管理', season: 'autumn', icon: 'assets/st-chushu.webp' },
+  { name: '白露', latin: 'BAILU', date: '9月7-9日', plant: '桂花', desc: '鸿雁来，玄鸟归', farming: '晚稻灌浆，棉花采摘', season: 'autumn', icon: 'assets/st-bailu.webp' },
+  { name: '秋分', latin: 'QIUFEN', date: '9月22-24日', plant: '菊花', desc: '雷始收声，蛰虫坯户', farming: '秋收秋种，晒谷入仓', season: 'autumn', icon: 'assets/st-qiufen.webp' },
+  { name: '寒露', latin: 'HANLU', date: '10月7-9日', plant: '芙蓉', desc: '鸿雁来宾，菊有黄华', farming: '晚稻收割，冬种准备', season: 'autumn', icon: 'assets/st-hanlu.webp' },
+  { name: '霜降', latin: 'SHUANGJANG', date: '10月23-24日', plant: '枫叶', desc: '豺乃祭兽，草木黄落', farming: '秋收扫尾，翻耕冬田', season: 'autumn', icon: 'assets/st-shuangjang.webp' },
+  { name: '立冬', latin: 'LIDONG', date: '11月7-8日', plant: '山茶', desc: '水始冰，地始冻', farming: '冬种油菜，修建水利', season: 'winter', icon: 'assets/st-lidong.webp' },
+  { name: '小雪', latin: 'XIAOXUE', date: '11月22-23日', plant: '银杏', desc: '虹藏不见，天气上升', farming: '冬季积肥，农田水利', season: 'winter', icon: 'assets/st-xiaoxue.webp' },
+  { name: '大雪', latin: 'DAXUE', date: '12月6-8日', plant: '腊梅', desc: '鹖鴠不鸣，虎始交', farming: '积肥造肥，兴修水利', season: 'winter', icon: 'assets/st-daxue.webp' },
+  { name: '冬至', latin: 'DONGZHI', date: '12月21-23日', plant: '水仙', desc: '蚯蚓结，麋角解', farming: '冬闲整地，来年规划', season: 'winter', icon: 'assets/st-dongzhi.webp' },
+  { name: '小寒', latin: 'XIAOHAN', date: '1月5-7日', plant: '天竺', desc: '雁北乡，鹊始巢', farming: '选种备种，农具修整', season: 'winter', icon: 'assets/st-xiaohan.webp' },
+  { name: '大寒', latin: 'DAHAN', date: '1月20-21日', plant: '瑞香', desc: '鸡始乳，征鸟厉疾', farming: '备春耕物资，迎接新年', season: 'winter', icon: 'assets/st-dahan.webp' },
 ];
 
 const seasonThemes = {
-  spring: { gradient: 'from-[#1a2e1a] via-[#2a3d28] to-[#1e3520]', glow: 'rgba(122, 184, 122, 0.15)', particle: '#7CB87C', accent: '#A8D5A0', name: '春', poem: '春风又绿江南岸', textColor: '#C8E6C8', bg: '/manus-storage/bg-spring-hd_5f744524.png' },
-  summer: { gradient: 'from-[#2e2510] via-[#3d3015] to-[#352a0e]', glow: 'rgba(212, 180, 70, 0.15)', particle: '#D4B046', accent: '#F5E0A0', name: '夏', poem: '接天莲叶无穷碧', textColor: '#F5EAC0', bg: '/manus-storage/bg-summer-hd_848680a0.png' },
-  autumn: { gradient: 'from-[#2e1510] via-[#3d1a14] to-[#351812]', glow: 'rgba(200, 80, 50, 0.15)', particle: '#C85030', accent: '#E89070', name: '秋', poem: '霜叶红于二月花', textColor: '#F0C0A8', bg: '/manus-storage/bg-autumn-hd_0704b67e.png' },
-  winter: { gradient: 'from-[#1a2230] via-[#202a38] to-[#182530]', glow: 'rgba(140, 180, 200, 0.15)', particle: '#8CBAD0', accent: '#C0E0F0', name: '冬', poem: '梅花香自苦寒来', textColor: '#D0E8F5', bg: '/manus-storage/bg-winter-hd_726fbbc3.png' },
+  spring: { gradient: 'from-[#1a2e1a] via-[#2a3d28] to-[#1e3520]', glow: 'rgba(122, 184, 122, 0.15)', particle: '#7CB87C', accent: '#A8D5A0', name: '春', poem: '春风又绿江南岸', textColor: '#C8E6C8', bg: 'assets/bg-spring-hd.webp' },
+  summer: { gradient: 'from-[#2e2510] via-[#3d3015] to-[#352a0e]', glow: 'rgba(212, 180, 70, 0.15)', particle: '#D4B046', accent: '#F5E0A0', name: '夏', poem: '接天莲叶无穷碧', textColor: '#F5EAC0', bg: 'assets/bg-summer-hd.webp' },
+  autumn: { gradient: 'from-[#2e1510] via-[#3d1a14] to-[#351812]', glow: 'rgba(200, 80, 50, 0.15)', particle: '#C85030', accent: '#E89070', name: '秋', poem: '霜叶红于二月花', textColor: '#F0C0A8', bg: 'assets/bg-autumn-hd.webp' },
+  winter: { gradient: 'from-[#1a2230] via-[#202a38] to-[#182530]', glow: 'rgba(140, 180, 200, 0.15)', particle: '#8CBAD0', accent: '#C0E0F0', name: '冬', poem: '梅花香自苦寒来', textColor: '#D0E8F5', bg: 'assets/bg-winter-hd.webp' },
 };
 
 // Canvas粒子系统
@@ -192,7 +193,7 @@ export default function SolarTermsPage() {
 
       {/* 顶部导航 */}
       <header className="absolute top-0 left-0 right-0 z-50 px-10 py-6 flex items-center justify-between">
-        <Link href="/">
+        <Link href={routePath("/")}>
           <button className="flex items-center gap-2 text-sm text-white/50 hover:text-white/80 transition-colors">
             <ArrowLeft className="w-4 h-4" />
             <span className="font-body-light">返回</span>

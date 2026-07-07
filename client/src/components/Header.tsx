@@ -1,5 +1,6 @@
 import { Search, Share2 } from 'lucide-react';
 import { Link } from 'wouter';
+import { routePath } from '@/lib/sitePaths';
 
 export default function Header() {
   return (
@@ -19,7 +20,7 @@ export default function Header() {
         
         {/* 右上角水稻穗装饰 */}
         <div className="absolute -top-4 -right-6 w-36 h-24 opacity-[0.15] pointer-events-none">
-          <img src="/manus-storage/rice-branch-decor_353e9b0d.png" alt="" className="w-full h-full object-contain object-right-top" />
+          <img src="assets/rice-branch-decor.webp" alt="" className="w-full h-full object-contain object-right-top" />
         </div>
 
         <div className="max-w-[1440px] mx-auto px-6 h-[60px] flex items-center justify-between relative z-10">
@@ -27,7 +28,7 @@ export default function Header() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded overflow-hidden border border-[#8B6914]/40 flex-shrink-0 shadow-sm">
               <img
-                src="/manus-storage/logo-seal_af439230.png"
+                src="assets/logo-seal.webp"
                 alt="湖南省农耕文化地图"
                 className="w-full h-full object-cover"
               />
@@ -51,7 +52,7 @@ export default function Header() {
               { label: '重要文物', href: '/artifacts' },
               { label: '节气日历', href: '/solar-terms' },
             ].map((item) => (
-              <Link key={item.href} href={item.href}>
+              <Link key={item.href} href={routePath(item.href)}>
                 <span className="text-[13px] text-[#E8D5A8] hover:text-white transition-colors duration-200 tracking-wide relative group cursor-pointer">
                   {item.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-[1.5px] bg-[#C4A86B] group-hover:w-full transition-all duration-300" />

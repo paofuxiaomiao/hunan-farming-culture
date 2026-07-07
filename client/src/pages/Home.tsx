@@ -4,6 +4,7 @@ import LeafletMap from '@/components/LeafletMap';
 import { mapPoints, type MapPoint } from '@/data/mapData';
 import { ChevronRight, Search, X, ExternalLink, Navigation, Share2, Layers, MapPin, Palette, LayoutGrid, ThumbsUp } from 'lucide-react';
 import { Link } from 'wouter';
+import { routePath } from '@/lib/sitePaths';
 
 export default function Home() {
   const [selectedPoint, setSelectedPoint] = useState<string | null>('ancient-1');
@@ -69,9 +70,9 @@ export default function Home() {
         <div className="relative px-5 py-2.5 flex items-center justify-between">
           {/* Logo + 标题 */}
           <div className="flex items-center gap-3">
-            <Link href="/">
+            <Link href={routePath("/")}>
               <motion.div whileHover={{ scale: 1.05 }} className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/20 transition-all cursor-pointer shadow-sm">
-                <img src="/manus-storage/logo-seal_af439230.png" alt="" className="w-7 h-7 object-cover rounded" />
+                <img src="assets/logo-seal.webp" alt="" className="w-7 h-7 object-cover rounded" />
               </motion.div>
             </Link>
             <div>
@@ -89,7 +90,7 @@ export default function Home() {
               { label: '重要文物', href: '/artifacts', icon: '🏺', active: false },
               { label: '节气日历', href: '/solar-terms', icon: '🌾', active: false },
             ].map((item) => (
-              <Link key={item.href} href={item.href}>
+              <Link key={item.href} href={routePath(item.href)}>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

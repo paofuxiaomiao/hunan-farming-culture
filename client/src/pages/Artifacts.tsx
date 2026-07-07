@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { ArrowLeft, MapPin, Calendar } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { routePath } from '@/lib/sitePaths';
 
 const artifactsData = [
   {
@@ -11,7 +12,7 @@ const artifactsData = [
     origin: '永州道县玉蟾岩遗址',
     description: '世界上最早的人工栽培稻标本，是人类从野生稻向栽培稻过渡的关键证据，证明了湖南是世界稻作农业的重要发源地。',
     significance: '世界之最',
-    image: '/manus-storage/artifact-pottery_8fb6ead8.png',
+    image: 'assets/artifact-pottery.webp',
     category: '农业遗存',
   },
   {
@@ -21,7 +22,7 @@ const artifactsData = [
     origin: '常德澧县彭头山遗址',
     description: '出土的陶器中夹杂有稻壳印痕，是长江中游最早的陶器之一，反映了早期定居农业社会的生活面貌。',
     significance: '国家一级文物',
-    image: '/manus-storage/artifact-pottery_8fb6ead8.png',
+    image: 'assets/artifact-pottery.webp',
     category: '陶器',
   },
   {
@@ -31,7 +32,7 @@ const artifactsData = [
     origin: '常德澧县城头山遗址',
     description: '中国目前发现最早的水稻田遗迹，保存有清晰的田埂、灌溉沟渠，是研究早期稻作农业的珍贵实物证据。',
     significance: '全国重点文保',
-    image: '/manus-storage/artifact-pottery_8fb6ead8.png',
+    image: 'assets/artifact-pottery.webp',
     category: '农业遗存',
   },
   {
@@ -41,7 +42,7 @@ const artifactsData = [
     origin: '长沙宁乡炭河里遗址',
     description: '中国现存最大的商代青铜方尊，以四只卷角羊为装饰，工艺精湛，是中国青铜铸造艺术的巅峰之作。',
     significance: '国宝级文物',
-    image: '/manus-storage/artifact-bronze_bae410ed.png',
+    image: 'assets/artifact-bronze.webp',
     category: '青铜器',
   },
   {
@@ -51,7 +52,7 @@ const artifactsData = [
     origin: '湘西龙山里耶古城',
     description: '出土秦简3.7万余枚，记录了秦代洞庭郡的行政管理、户籍制度和农业税赋，是研究秦代地方治理的第一手资料。',
     significance: '21世纪重大考古发现',
-    image: '/manus-storage/artifact-bronze_bae410ed.png',
+    image: 'assets/artifact-bronze.webp',
     category: '简牍',
   },
   {
@@ -61,7 +62,7 @@ const artifactsData = [
     origin: '长沙望城铜官窑遗址',
     description: '开创了釉下彩绘工艺的先河，产品远销东南亚、西亚等地，是唐代海上丝绸之路的重要见证。',
     significance: '世界陶瓷史里程碑',
-    image: '/manus-storage/artifact-pottery_8fb6ead8.png',
+    image: 'assets/artifact-pottery.webp',
     category: '陶瓷',
   },
   {
@@ -71,7 +72,7 @@ const artifactsData = [
     origin: '怀化洪江高庙遗址',
     description: '精美的白陶祭器上刻有太阳纹、凤鸟纹等图案，是中国最早的宗教祭祀艺术品之一，反映了先民的精神世界。',
     significance: '中国最早宗教艺术',
-    image: '/manus-storage/artifact-bronze_bae410ed.png',
+    image: 'assets/artifact-bronze.webp',
     category: '祭祀器',
   },
   {
@@ -81,7 +82,7 @@ const artifactsData = [
     origin: '娄底新化紫鹊界',
     description: '无需人工修建水库和水渠的自流灌溉系统，利用山体自然渗水原理，是古代农业水利工程的杰出代表。',
     significance: '世界灌溉工程遗产',
-    image: '/manus-storage/route-farming-origin_95979875.png',
+    image: 'assets/route-farming-origin.webp',
     category: '水利工程',
   },
 ];
@@ -94,7 +95,7 @@ export default function ArtifactsPage() {
       {/* 页面标题 */}
       <section className="bg-gradient-to-b from-[#FAF7F0] to-background py-8">
         <div className="max-w-[1200px] mx-auto px-6">
-          <Link href="/">
+          <Link href={routePath("/")}>
             <button className="flex items-center gap-2 text-sm text-[#8B6914] hover:text-[#5C4520] mb-4 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               返回地图
